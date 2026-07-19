@@ -3,114 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GurukrupaTech - GURU-AI</title>
+    <title>GurukrupaTech - Guru AI</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="dark-theme">
 
-    <div class="hud-container">
-        
-        <header class="cyber-header">
-            <h1 class="brand-title">GurukrupaTech</h1>
-            <div class="sub-brand">
-                <span class="cyber-line"></span>
-                <h2>Guru AI</h2>
-                <span class="cyber-line"></span>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="avatar-container">
+                <img src="swity-avatar.png" alt="Swity" class="avatar-img">
+                <div class="status-indicator online"></div>
             </div>
-            <div class="admin-tag">Trader Shiv</div>
-        </header>
-
-        <div class="telemetry-left font-mono">
-            <p>> SYSTEM INITIALIZING...</p>
-            <p>> LOADING MODULES...</p>
-            <p>> AI CORE CONNECTED</p>
-            <p>> VOICE ENGINE: ON</p>
-            <p>> LANGUAGE PACK: [ EN | HI | MR ]</p>
-            <p>> SECURE CONNECTION ESTABLISHED</p>
-            <div class="online-badge">
-                <span class="pulse-dot"></span> ONLINE
+            <div class="header-info">
+                <h2>Swity (AI Assistant)</h2>
+                <span class="status-text">Online</span>
+            </div>
+            <div class="header-actions">
+                <button id="voice-toggle-btn" class="header-btn voice-on" title="Toggle Voice Reply">🔊</button>
+                <button id="settings-btn" class="header-btn" title="Settings">⚙️</button>
             </div>
         </div>
 
-        <div class="telemetry-right font-mono">
-            <p>> STARTING AI...</p>
-            <p>> NEURAL NETWORK: ACTIVE</p>
-            <p>> DATA STREAM: ONLINE</p>
-            <p>> TRADING ANALYTICS: READY</p>
-            <p>> VOICE ASSISTANT: READY</p>
-        </div>
+        <div class="chat-messages" id="chat-messages">
+            </div>
 
-        <div class="avatar-matrix-stage">
-            <div class="neon-ring ring-outer"></div>
-            <div class="neon-ring ring-middle"></div>
-            <div class="neon-ring ring-inner"></div>
-            <div class="avatar-frame">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=500" alt="Swity AI" class="main-avatar-img">
-                <div class="avatar-tag">SWITY</div>
+        <div class="chat-input-area">
+            <textarea id="user-input" placeholder="Type your message here..." rows="1"></textarea>
+            <div class="input-actions">
+                <button id="mic-btn" class="mic-button" title="Speak">🎤</button>
+                <button id="send-btn" class="send-button" title="Send">ASK</button>
             </div>
         </div>
-
-        <div class="panel-header">
-    <div class="panel-title">
-        <i class="fa-solid fa-comment-dots"></i>
-        <span>Swity (AI Assistant)</span>
     </div>
 
-    <div class="panel-actions">
-        <button id="voiceToggleBtn" class="header-btn">
-            <i class="fa-solid fa-volume-high"></i>
-        </button>
-
-        <button id="settingsBtn" class="header-btn">
-            <i class="fa-solid fa-gear"></i>
-        </button>
-    </div>
+    <div id="settings-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>System Configuration</h3>
+                <span class="close-modal" id="close-modal-x">&times;</span>
             </div>
-            
-            <div class="chat-display-box" id="chatDisplayBox">
-                <div class="ai-msg-row">
-                    <div class="mini-avatar">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Swity">
-                    </div>
-                    <div class="msg-bubble-content">
-                        <p>Helloboss! 👋</p>
-                        <p>I am Swity, your AI Assistant. How can I help you today?</p>
-                    </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="setting-lang">Language</label>
+                    <select id="setting-lang">
+                        <option value="en-US" selected>English (EN)</option>
+                        <option value="hi-IN">Hindi (HI)</option>
+                        <option value="mr-IN">Marathi (MR)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="setting-speed">Voice Speed</label>
+                    <select id="setting-speed">
+                        <option value="0.7">Slow</option>
+                        <option value="1.0" selected>Normal</option>
+                        <option value="1.4">Fast</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <label for="setting-theme">Theme</label>
+                    <select id="setting-theme">
+                        <option value="dark-theme" selected>Dark</option>
+                        <option value="light-theme">Light</option>
+                    </select>
                 </div>
             </div>
-
-            <form class="chat-input-wrapper" id="chatInputForm">
-                <input type="text" id="chatUserInput" placeholder="Type your message here..." autocomplete="off" required>
-                <button type="button" class="mic-icon-btn" id="voiceCommandBtn">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-            </form>
-
-            <button type="submit" form="chatInputForm" class="massive-ask-btn">
-                <i class="fa-regular fa-comments"></i> ASK
-            </button>
+            <div class="modal-footer">
+                <button id="close-modal-btn" class="cyber-btn">Close</button>
+            </div>
         </div>
-
-    </div>
-
-    <div class="binary-bg-effect font-mono">
-        01001010 01101111 01100010<br>
-        01110011 00100000 01000001<br>
-        01001001 01010100 00110001<br>
-        01100011 01101111 01100100
-    </div>
-    
-    <div class="binary-bg-effect right font-mono">
-        1101 0100 1101<br>
-        0110 1001 0111<br>
-        &lt;/&gt; 1101 1101<br>
-        0101 0110 0011
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
