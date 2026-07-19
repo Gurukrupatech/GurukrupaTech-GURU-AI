@@ -1,18 +1,16 @@
-// State Variables
+// Configuration & State
 let voiceReplyEnabled = true;
 let currentLanguage = 'en-US';
 let voiceSpeed = 1.0;
 let isRecording = false;
 
-// DOM Elements
+// DOM Selectors
 const voiceToggleBtn = document.getElementById('voice-toggle-btn');
 const settingsBtn = document.getElementById('settings-btn');
 const micBtn = document.getElementById('mic-btn');
 const sendBtn = document.getElementById('send-btn');
 const userInput = document.getElementById('user-input');
 const chatMessages = document.getElementById('chat-messages');
-
-// Modal Elements
 const settingsModal = document.getElementById('settings-modal');
 const closeModalX = document.getElementById('close-modal-x');
 const closeModalBtn = document.getElementById('close-modal-btn');
@@ -20,98 +18,99 @@ const settingLang = document.getElementById('setting-lang');
 const settingSpeed = document.getElementById('setting-speed');
 const settingTheme = document.getElementById('setting-theme');
 
-// 1. Voice Reply Toggle Button Functionality
+// System Welcome Greetings Map
+const welcomeGreetings = {
+    'en-US': "Hello Boss! 👋 Welcome back. I'm Swity AI, ready to assist you. What can I do for you today?",
+    'hi-IN': "नमस्ते बॉस! 👋 आपका स्वागत है। मैं स्वीटी एआई (Swity AI) हूँ, आपकी सेवा में हाजिर। आज मैं आपके लिए क्या कर सकती हूँ?",
+    'mr-IN': "हॅलो बॉस! 👋 तुमचे स्वागत आहे. मी स्वीटी एआय (Swity AI) आहे, तुमच्या सेवेसाठी सज्ज. आज मी तुमच्यासाठी काय करू शकते?"
+};
+
+// 1. Initialize App & Set Welcome Message
+function initGreeting() {
+    if (chatMessages) {
+        chatMessages.innerHTML = ''; // Clear previous
+        const greetingText = welcomeGreetings[currentLanguage];
+        appendMessage(greetingText, 'ai');
+        speakText(greetingText);
+    }
+}
+
+// 2. Voice Toggle Feature
 if (voiceToggleBtn) {
     voiceToggleBtn.addEventListener('click', () => {
         voiceReplyEnabled = !voiceReplyEnabled;
         if (voiceReplyEnabled) {
             voiceToggleBtn.innerText = '🔊';
             voiceToggleBtn.classList.remove('voice-off');
-            voiceToggleBtn.classList.add('voice-on');
         } else {
             voiceToggleBtn.innerText = '🔇';
-            voiceToggleBtn.classList.remove('voice-on');
             voiceToggleBtn.classList.add('voice-off');
-            window.speechSynthesis.cancel(); // Stop talking immediately if turned off
+            window.speechSynthesis.cancel();
         }
     });
 }
 
-// 2. Settings Popup Controls
-if (settingsBtn) {
+// 3. Settings Popup Logic
+if (settingsBtn && settingsModal) {
     settingsBtn.addEventListener('click', () => {
         settingsModal.classList.add('active');
     });
 }
 
-function closeModal() {
-    if (settingsModal) {
-        settingsModal.classList.remove('active');
-    }
+function closePopup() {
+    if (settingsModal) settingsModal.classList.remove('active');
 }
-
-if (closeModalX) closeModalX.addEventListener('click', closeModal);
-if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-
+if (closeModalX) closeModalX.addEventListener('click', closePopup);
+if (closeModalBtn) closeModalBtn.addEventListener('click', closePopup);
 if (settingsModal) {
     settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) {
-            closeModal();
-        }
+        if (e.target === settingsModal) closePopup();
     });
 }
 
-// 3. Settings Dropdown Selectors
+// 4. Handle Config Settings Changes
 if (settingLang) {
     settingLang.addEventListener('change', (e) => {
         currentLanguage = e.target.value;
+        initGreeting(); // Change greeting instantly when language updates
     });
 }
-
 if (settingSpeed) {
     settingSpeed.addEventListener('change', (e) => {
         voiceSpeed = parseFloat(e.target.value);
     });
 }
-
 if (settingTheme) {
     settingTheme.addEventListener('change', (e) => {
-        const chosenTheme = e.target.value;
-        if (chosenTheme === 'dark-theme') {
-            document.body.classList.remove('light-theme');
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
-            document.body.classList.add('light-theme');
-        }
+        document.body.className = e.target.value;
     });
 }
 
-// 4. Text-to-Speech Engine (AI Speaks)
+// 5. Text-to-Speech Engine
 function speakText(text) {
     if (!voiceReplyEnabled) return;
+    window.speechSynthesis.cancel();
+    
+    // Clean emojis for clean speech syntax
+    const cleanText = text.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '');
 
-    window.speechSynthesis.cancel(); // Stop any previous speech
-
-    const utterance = new SpeechSynthesisUtterance(text);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.lang = currentLanguage;
     utterance.rate = voiceSpeed;
 
     const voices = window.speechSynthesis.getVoices();
-    const matchingVoice = voices.find(voice => voice.lang.includes(currentLanguage));
-    if (matchingVoice) {
-        utterance.voice = matchingVoice;
-    }
+    const match = voices.find(v => v.lang.includes(currentLanguage));
+    if (match) utterance.voice = match;
 
     window.speechSynthesis.speak(utterance);
 }
 
-// Fix for Chrome/Safari voice loading bugs
+// Chrome fix for loading speech engines
 if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
 }
 
-// 5. Microphone Speech Recognition (Existing working feature)
+// 6. Speech Recognition (Mic Button)
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 let recognition;
 
@@ -120,37 +119,21 @@ if (SpeechRecognition) {
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onstart = () => {
-        isRecording = true;
-        if (micBtn) micBtn.classList.add('recording');
-    };
-
-    recognition.onend = () => {
-        isRecording = false;
-        if (micBtn) micBtn.classList.remove('recording');
-    };
-
-    recognition.onerror = () => {
-        isRecording = false;
-        if (micBtn) micBtn.classList.remove('recording');
-    };
-
+    recognition.onstart = () => { isRecording = true; micBtn.classList.add('recording'); };
+    recognition.onend = () => { isRecording = false; micBtn.classList.remove('recording'); };
+    recognition.onerror = () => { isRecording = false; micBtn.classList.remove('recording'); };
     recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        if (userInput) {
-            userInput.value = transcript;
-            handleSendMessage();
-        }
+        userInput.value = event.results[0][0].transcript;
+        handleSendMessage();
     };
 }
 
 if (micBtn) {
     micBtn.addEventListener('click', () => {
         if (!SpeechRecognition) {
-            alert("Speech Recognition is not supported in this browser.");
+            alert("Speech API not supported in this browser.");
             return;
         }
-        
         if (isRecording) {
             recognition.stop();
         } else {
@@ -160,33 +143,17 @@ if (micBtn) {
     });
 }
 
-// 6. Messaging Pipeline & Layout Integration
+// 7. Message Engine Pipeline
 function appendMessage(text, sender) {
     if (!chatMessages) return;
-    
     const msgDiv = document.createElement('div');
-    msgDiv.classList.add('message', `${sender}-message`);
-    
-    const textNode = document.createElement('p');
-    textNode.innerText = text;
-    msgDiv.appendChild(textNode);
-    
+    msgDiv.className = `message ${sender}-message`;
+    msgDiv.innerHTML = `<p>${text}</p>`;
     chatMessages.appendChild(msgDiv);
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function generateMockAIResponse(userText) {
-    if (currentLanguage.startsWith('hi')) {
-        return "मैंने आपकी बात सुन ली है। मैं आपकी क्या मदद कर सकता हूँ?";
-    } else if (currentLanguage.startsWith('mr')) {
-        return "मी तुमचे ऐकले आहे. मी तुम्हाला कशी मदत करू शकतो?";
-    } else {
-        return `Processed your request: "${userText}". How else can I assist you?`;
-    }
-}
-
 function handleSendMessage() {
-    if (!userInput) return;
     const text = userInput.value.trim();
     if (!text) return;
 
@@ -194,9 +161,16 @@ function handleSendMessage() {
     userInput.value = '';
 
     setTimeout(() => {
-        const aiResponse = generateMockAIResponse(text);
-        appendMessage(aiResponse, 'ai');
-        speakText(aiResponse);
+        let reply = "";
+        if (currentLanguage === 'hi-IN') {
+            reply = "जी बॉस, मैंने आपकी बात समझ ली। बताइए और क्या सहायता करूँ?";
+        } else if (currentLanguage === 'mr-IN') {
+            reply = "होय बॉस, मला समजले. सांगा अजून काय मदत हवी आहे?";
+        } else {
+            reply = `Understood, Boss! I have processed: "${text}". What's next?`;
+        }
+        appendMessage(reply, 'ai');
+        speakText(reply);
     }, 600);
 }
 
@@ -209,3 +183,6 @@ if (userInput) {
         }
     });
 }
+
+// Initial Bootup trigger
+window.addEventListener('DOMContentLoaded', initGreeting);
