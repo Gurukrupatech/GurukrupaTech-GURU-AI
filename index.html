@@ -8,199 +8,98 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="animated-bg">
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-        <div class="cube"></div>
-    </div>
 
-    <div class="app-container">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-header">
-                <div class="brand">
-                    <i class="fa-solid fa-atom brand-icon"></i>
-                    <div class="brand-text">
-                        <h1>GURU-AI</h1>
-                        <span>GurukrupaTech</span>
+    <div class="hud-container">
+        
+        <header class="cyber-header">
+            <h1 class="brand-title">GurukrupaTech</h1>
+            <div class="sub-brand">
+                <span class="cyber-line"></span>
+                <h2>Guru AI</h2>
+                <span class="cyber-line"></span>
+            </div>
+            <div class="admin-tag">Trader Shiv</div>
+        </header>
+
+        <div class="telemetry-left font-mono">
+            <p>> SYSTEM INITIALIZING...</p>
+            <p>> LOADING MODULES...</p>
+            <p>> AI CORE CONNECTED</p>
+            <p>> VOICE ENGINE: ON</p>
+            <p>> LANGUAGE PACK: [ EN | HI | MR ]</p>
+            <p>> SECURE CONNECTION ESTABLISHED</p>
+            <div class="online-badge">
+                <span class="pulse-dot"></span> ONLINE
+            </div>
+        </div>
+
+        <div class="telemetry-right font-mono">
+            <p>> STARTING AI...</p>
+            <p>> NEURAL NETWORK: ACTIVE</p>
+            <p>> DATA STREAM: ONLINE</p>
+            <p>> TRADING ANALYTICS: READY</p>
+            <p>> VOICE ASSISTANT: READY</p>
+        </div>
+
+        <div class="avatar-matrix-stage">
+            <div class="neon-ring ring-outer"></div>
+            <div class="neon-ring ring-middle"></div>
+            <div class="neon-ring ring-inner"></div>
+            <div class="avatar-frame">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=500" alt="Swity AI" class="main-avatar-img">
+                <div class="avatar-tag">SWITY</div>
+            </div>
+        </div>
+
+        <div class="chat-panel-interface">
+            <div class="panel-header">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>Swity (AI Assistant)</span>
+            </div>
+            
+            <div class="chat-display-box" id="chatDisplayBox">
+                <div class="ai-msg-row">
+                    <div class="mini-avatar">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Swity">
+                    </div>
+                    <div class="msg-bubble-content">
+                        <p>Hello! 👋</p>
+                        <p>I am Swity, your AI Assistant. How can I help you today?</p>
                     </div>
                 </div>
-                <button class="close-sidebar-btn" id="closeSidebarBtn">
-                    <i class="fa-solid fa-xmark"></i>
+            </div>
+
+            <form class="chat-input-wrapper" id="chatInputForm">
+                <input type="text" id="chatUserInput" placeholder="Type your message here..." autocomplete="off" required>
+                <button type="button" class="mic-icon-btn" id="voiceCommandBtn">
+                    <i class="fa-solid fa-microphone"></i>
                 </button>
-            </div>
+            </form>
 
-            <button class="new-chat-btn" id="newChatBtn">
-                <i class="fa-solid fa-plus"></i>
-                <span>New Cyber Chat</span>
+            <button type="submit" form="chatInputForm" class="massive-ask-btn">
+                <i class="fa-regular fa-comments"></i> ASK
             </button>
-
-            <div class="sidebar-nav">
-                <div class="nav-section">
-                    <span class="section-title">Chat History</span>
-                    <ul class="chat-history-list" id="chatHistoryList">
-                        <li class="history-item active" data-id="1">
-                            <i class="fa-regular fa-message"></i>
-                            <span class="history-text">Quantum Matrix Core Init</span>
-                            <button class="delete-history-btn"><i class="fa-solid fa-trash-can"></i></button>
-                        </li>
-                        <li class="history-item" data-id="2">
-                            <i class="fa-regular fa-message"></i>
-                            <span class="history-text">Web App Optimization API</span>
-                            <button class="delete-history-btn"><i class="fa-solid fa-trash-can"></i></button>
-                        </li>
-                        <li class="history-item" data-id="3">
-                            <i class="fa-regular fa-message"></i>
-                            <span class="history-text">Marathi Translation Module</span>
-                            <button class="delete-history-btn"><i class="fa-solid fa-trash-can"></i></button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="sidebar-footer">
-                <div class="footer-btn" id="settingsBtn">
-                    <i class="fa-solid fa-sliders"></i>
-                    <span>Matrix Settings</span>
-                </div>
-                <div class="profile-section">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256&h=256" alt="User Profile" class="user-avatar">
-                    <div class="user-info">
-                        <span class="user-name">Admin Boss</span>
-                        <span class="user-role">Root Access</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <main class="chat-container">
-            <header class="chat-header">
-                <div class="header-left">
-                    <button class="menu-btn" id="menuBtn">
-                        <i class="fa-solid fa-bars-staggered"></i>
-                    </button>
-                    <div class="ai-profile-header">
-                        <div class="avatar-container active">
-                            <div class="avatar-pulse"></div>
-                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=256&h=256" alt="Swity AI" class="ai-avatar">
-                        </div>
-                        <div class="ai-status-info">
-                            <h2>Swity AI <span class="gender-tag">Female</span></h2>
-                            <div class="status-indicator">
-                                <span class="dot animate-flicker"></span>
-                                <span class="status-text">Online | Eng | म | हि</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-right">
-                    <button class="action-icon-btn" title="Clear Canvas" id="clearChatBtn">
-                        <i class="fa-solid fa-broom"></i>
-                    </button>
-                    <button class="action-icon-btn" title="Network Connection">
-                        <i class="fa-solid fa-wifi text-neon-blue"></i>
-                    </button>
-                </div>
-            </header>
-
-            <div class="chat-window" id="chatWindow">
-                <div class="message ai-message system-init">
-                    <div class="message-avatar">
-                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=256&h=256" alt="Swity AI">
-                    </div>
-                    <div class="message-content">
-                        <div class="message-bubble">
-                            <p class="greeting-text">Hello Boss! 👋 Welcome back to GurukrupaTech. I'm Swity, your personal AI Assistant.</p>
-                            <p>System fully operational. Ready to deploy solutions in English, Marathi (मराठी), and Hindi (हिंदी). How can I assist your workflow today?</p>
-                        </div>
-                        <span class="message-time">Just Now</span>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="chat-input-area">
-                <div class="file-preview-bar id-hidden" id="filePreviewBar">
-                    <div class="preview-item">
-                        <i class="fa-solid fa-file-invoice"></i>
-                        <span id="previewFileName">document.pdf</span>
-                        <button id="removeFileBtn"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                </div>
-
-                <form class="input-form" id="inputForm">
-                    <div class="input-wrapper">
-                        <div class="input-actions-left">
-                            <label for="fileUpload" class="action-btn" title="Attach Document">
-                                <i class="fa-solid fa-paperclip"></i>
-                                <input type="file" id="fileUpload" hidden>
-                            </label>
-                            <label for="imageUpload" class="action-btn" title="Upload Image">
-                                <i class="fa-solid fa-image"></i>
-                                <input type="file" id="imageUpload" accept="image/*" hidden>
-                            </label>
-                        </div>
-                        
-                        <textarea id="userInput" placeholder="Command Swity AI..." rows="1" required></textarea>
-                        
-                        <div class="input-actions-right">
-                            <button type="button" class="action-btn voice-btn" id="voiceBtn" title="Voice Command Mode">
-                                <i class="fa-solid fa-microphone" id="voiceIcon"></i>
-                            </button>
-                            <button type="submit" class="send-btn" id="sendBtn" title="Transmit Command">
-                                <i class="fa-solid fa-paper-plane"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </footer>
-        </main>
-    </div>
-
-    <div class="modal-overlay id-hidden" id="settingsModal">
-        <div class="modal-content glassmorphism">
-            <div class="modal-header">
-                <h3><i class="fa-solid fa-gear"></i> Interface Control Unit</h3>
-                <button class="close-modal-btn" id="closeModalBtn"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <div class="setting-group">
-                    <label>Neural Audio Processing</label>
-                    <div class="toggle-switch">
-                        <input type="checkbox" id="voiceToggle" checked>
-                        <label for="voiceToggle"></label>
-                    </div>
-                </div>
-                <div class="setting-group">
-                    <label>Response Velocity Model</label>
-                    <select class="custom-select">
-                        <option>Swity-Turbo-V4 (Real-time)</option>
-                        <option>Gurukrupa-Quantum-Max</option>
-                    </select>
-                </div>
-                <div class="setting-group">
-                    <label>Primary Terminal Matrix Theme</label>
-                    <div class="theme-dots">
-                        <span class="theme-dot active-dot" style="background: linear-gradient(135deg, #00f2fe, #4facfe);"></span>
-                        <span class="theme-dot" style="background: linear-gradient(135deg, #b600ff, #ff007b);"></span>
-                    </div>
-                </div>
-            </div>
         </div>
+
     </div>
 
-    <div class="app-loader" id="appLoader">
-        <div class="cyber-spinner">
-            <div class="spinner-ring ring-1"></div>
-            <div class="spinner-ring ring-2"></div>
-            <div class="spinner-ring ring-3"></div>
-            <div class="loader-logo"><i class="fa-solid fa-shield-halved"></i></div>
-        </div>
-        <p class="loader-text">INITIALIZING SWITY AI MATRIX CORE...</p>
+    <div class="binary-bg-effect font-mono">
+        01001010 01101111 01100010<br>
+        01110011 00100000 01000001<br>
+        01001001 01010100 00110001<br>
+        01100011 01101111 01100100
     </div>
+    
+    <div class="binary-bg-effect right font-mono">
+        1101 0100 1101<br>
+        0110 1001 0111<br>
+        &lt;/&gt; 1101 1101<br>
+        0101 0110 0011
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
-
