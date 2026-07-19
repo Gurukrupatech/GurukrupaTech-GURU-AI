@@ -94,5 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
         isRecording = false;
         voiceBtn.classList.remove("active");
         userInput.placeholder = "Type your message here...";
-    }
+   const settingsBtn = document.getElementById("settingsBtn");
+const voiceToggleBtn = document.getElementById("voiceToggleBtn");
+
+settingsBtn.addEventListener("click", () => {
+    alert("Settings button clicked");
+});
+
+voiceToggleBtn.addEventListener("click", () => {
+    alert("Voice button clicked");
+}); }
 });
