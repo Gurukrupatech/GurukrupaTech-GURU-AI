@@ -416,3 +416,36 @@ body {
         display: none;
     }
 }
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.panel-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.panel-actions{
+    display:flex;
+    gap:10px;
+}
+
+.header-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    border-radius:50%;
+    background:rgba(0,242,254,.12);
+    color:#00f2fe;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.header-btn:hover{
+    background:#00f2fe;
+    color:#000;
+    box-shadow:0 0 15px #00f2fe;
+}
