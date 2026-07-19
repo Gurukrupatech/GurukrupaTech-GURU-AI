@@ -1,107 +1,211 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const inputForm = document.getElementById("chatInputForm");
-    const userInput = document.getElementById("chatUserInput");
-    const chatDisplayBox = document.getElementById("chatDisplayBox");
-    const voiceBtn = document.getElementById("voiceCommandBtn");
+// State Variables
+let voiceReplyEnabled = true;
+let currentLanguage = 'en-US';
+let voiceSpeed = 1.0;
+let isRecording = false;
 
-    let isRecording = false;
-    let recognition = null;
+// DOM Elements
+const voiceToggleBtn = document.getElementById('voice-toggle-btn');
+const settingsBtn = document.getElementById('settings-btn');
+const micBtn = document.getElementById('mic-btn');
+const sendBtn = document.getElementById('send-btn');
+const userInput = document.getElementById('user-input');
+const chatMessages = document.getElementById('chat-messages');
 
-    // Chat Controller Transmit System
-    inputForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const text = userInput.value.trim();
-        if (!text) return;
+// Modal Elements
+const settingsModal = document.getElementById('settings-modal');
+const closeModalX = document.getElementById('close-modal-x');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const settingLang = document.getElementById('setting-lang');
+const settingSpeed = document.getElementById('setting-speed');
+const settingTheme = document.getElementById('setting-theme');
 
-        // 1. Render User Message Packet Bubble
-        appendMessage(text, "user");
-        userInput.value = "";
-
-        // 2. Trigger Smart Simulated AI Response Pipeline Engine
-        setTimeout(() => {
-            generateAIResponse(text);
-        }, 1000);
-    });
-
-    function appendMessage(text, sender) {
-        const msgRow = document.createElement("div");
-        msgRow.className = sender === "user" ? "user-msg-row" : "ai-msg-row";
-
-        const avatarMarkup = sender === "user" 
-            ? `<div class="mini-avatar"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="User"></div>`
-            : `<div class="mini-avatar"><img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" alt="Swity"></div>`;
-
-        msgRow.innerHTML = `
-            ${avatarMarkup}
-            <div class="msg-bubble-content">
-                <p>${escapeHTML(text)}</p>
-            </div>
-        `;
-
-        chatDisplayBox.appendChild(msgRow);
-        chatDisplayBox.scrollTop = chatDisplayBox.scrollHeight;
-    }
-
-    function generateAIResponse(query) {
-        const lowerText = query.toLowerCase();
-        let reply = "Command analyzed by Swity matrix core module system. Processing normal.";
-
-        if (lowerText.includes("marathi") || lowerText.includes("मराठी") || lowerText.includes("कशी आहेस")) {
-            reply = "मी एकदम आनंदात आहे, बॉस! GurukrupaTech च्या सायबर हबमध्ये तुमचे स्वागत आहे. आज आपण काय काम करणार आहोत?";
-        } else if (lowerText.includes("hindi") || lowerText.includes("हिंदी") || lowerText.includes("तुम कौन हो")) {
-            reply = "नमस्ते बॉस! मैं स्विती हूँ, आपकी पर्सनल AI असिस्टेंट। मैं आपके सारे काम चुटकियों में संभाल सकती हूँ।";
-        } else if (lowerText.includes("hello") || lowerText.includes("hi")) {
-            reply = "Hello Boss! Ready to process neural commands. What is our objective today?";
+// 1. Voice Reply Toggle Button Functionality
+if (voiceToggleBtn) {
+    voiceToggleBtn.addEventListener('click', () => {
+        voiceReplyEnabled = !voiceReplyEnabled;
+        if (voiceReplyEnabled) {
+            voiceToggleBtn.innerText = '🔊';
+            voiceToggleBtn.classList.remove('voice-off');
+            voiceToggleBtn.classList.add('voice-on');
+        } else {
+            voiceToggleBtn.innerText = '🔇';
+            voiceToggleBtn.classList.remove('voice-on');
+            voiceToggleBtn.classList.add('voice-off');
+            window.speechSynthesis.cancel(); // Stop talking immediately if turned off
         }
+    });
+}
 
-        appendMessage(reply, "ai");
+// 2. Settings Popup Controls
+if (settingsBtn) {
+    settingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('active');
+    });
+}
+
+function closeModal() {
+    if (settingsModal) {
+        settingsModal.classList.remove('active');
+    }
+}
+
+if (closeModalX) closeModalX.addEventListener('click', closeModal);
+if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+
+if (settingsModal) {
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            closeModal();
+        }
+    });
+}
+
+// 3. Settings Dropdown Selectors
+if (settingLang) {
+    settingLang.addEventListener('change', (e) => {
+        currentLanguage = e.target.value;
+    });
+}
+
+if (settingSpeed) {
+    settingSpeed.addEventListener('change', (e) => {
+        voiceSpeed = parseFloat(e.target.value);
+    });
+}
+
+if (settingTheme) {
+    settingTheme.addEventListener('change', (e) => {
+        const chosenTheme = e.target.value;
+        if (chosenTheme === 'dark-theme') {
+            document.body.classList.remove('light-theme');
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+            document.body.classList.add('light-theme');
+        }
+    });
+}
+
+// 4. Text-to-Speech Engine (AI Speaks)
+function speakText(text) {
+    if (!voiceReplyEnabled) return;
+
+    window.speechSynthesis.cancel(); // Stop any previous speech
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = currentLanguage;
+    utterance.rate = voiceSpeed;
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find(voice => voice.lang.includes(currentLanguage));
+    if (matchingVoice) {
+        utterance.voice = matchingVoice;
     }
 
-    function escapeHTML(str) {
-        return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
-    }
+    window.speechSynthesis.speak(utterance);
+}
 
-    // Webkit speech integration layer architecture module 
-    if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
-        const SpeechRecognition = window.webkitSpeechRecognition || window.speechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.lang = "en-US";
+// Fix for Chrome/Safari voice loading bugs
+if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+}
 
-        recognition.onstart = () => {
-            isRecording = true;
-            voiceBtn.classList.add("active");
-            userInput.placeholder = "Listening...";
-        };
+// 5. Microphone Speech Recognition (Existing working feature)
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognition;
 
-        recognition.onerror = () => { stopVoicePipeline(); };
-        recognition.onend = () => { stopVoicePipeline(); };
+if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
-        recognition.onresult = (event) => {
-            userInput.value = event.results[0][0].transcript;
-        };
+    recognition.onstart = () => {
+        isRecording = true;
+        if (micBtn) micBtn.classList.add('recording');
+    };
 
-        voiceBtn.addEventListener("click", () => {
-            if (!isRecording) {
-                recognition.start();
-            } else {
-                recognition.stop();
-            }
-        });
-    }
-
-    function stopVoicePipeline() {
+    recognition.onend = () => {
         isRecording = false;
-        voiceBtn.classList.remove("active");
-        userInput.placeholder = "Type your message here...";
-   const settingsBtn = document.getElementById("settingsBtn");
-const voiceToggleBtn = document.getElementById("voiceToggleBtn");
+        if (micBtn) micBtn.classList.remove('recording');
+    };
 
-settingsBtn.addEventListener("click", () => {
-    alert("Settings button clicked");
-});
+    recognition.onerror = () => {
+        isRecording = false;
+        if (micBtn) micBtn.classList.remove('recording');
+    };
 
-voiceToggleBtn.addEventListener("click", () => {
-    alert("Voice button clicked");
-}); }
-});
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (userInput) {
+            userInput.value = transcript;
+            handleSendMessage();
+        }
+    };
+}
+
+if (micBtn) {
+    micBtn.addEventListener('click', () => {
+        if (!SpeechRecognition) {
+            alert("Speech Recognition is not supported in this browser.");
+            return;
+        }
+        
+        if (isRecording) {
+            recognition.stop();
+        } else {
+            recognition.lang = currentLanguage;
+            recognition.start();
+        }
+    });
+}
+
+// 6. Messaging Pipeline & Layout Integration
+function appendMessage(text, sender) {
+    if (!chatMessages) return;
+    
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('message', `${sender}-message`);
+    
+    const textNode = document.createElement('p');
+    textNode.innerText = text;
+    msgDiv.appendChild(textNode);
+    
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function generateMockAIResponse(userText) {
+    if (currentLanguage.startsWith('hi')) {
+        return "मैंने आपकी बात सुन ली है। मैं आपकी क्या मदद कर सकता हूँ?";
+    } else if (currentLanguage.startsWith('mr')) {
+        return "मी तुमचे ऐकले आहे. मी तुम्हाला कशी मदत करू शकतो?";
+    } else {
+        return `Processed your request: "${userText}". How else can I assist you?`;
+    }
+}
+
+function handleSendMessage() {
+    if (!userInput) return;
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    appendMessage(text, 'user');
+    userInput.value = '';
+
+    setTimeout(() => {
+        const aiResponse = generateMockAIResponse(text);
+        appendMessage(aiResponse, 'ai');
+        speakText(aiResponse);
+    }, 600);
+}
+
+if (sendBtn) sendBtn.addEventListener('click', handleSendMessage);
+if (userInput) {
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSendMessage();
+        }
+    });
+}
