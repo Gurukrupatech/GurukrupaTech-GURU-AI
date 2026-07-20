@@ -1,1 +1,130 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #050112;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+
+/* अवतार आणि ग्लो इफेक्ट */
+.avatar-container {
+    position: relative;
+    width: 250px;
+    height: 250px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    z-index: 2;
+    border: 3px solid #bc00dd;
+}
+
+/* बोलताना चेहऱ्याची/इमेजची हालचाल होण्यासाठी ॲनिमेशन क्लास */
+.talking {
+    animation: bounce 0.4s infinite alternate, pulse-glow 0.4s infinite alternate;
+}
+
+@keyframes bounce {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.03); }
+}
+
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 15px #00f3ff; }
+    100% { box-shadow: 0 0 30px #bc00dd; }
+}
+
+/* चॅट बॉक्स डिझाईन */
+.chat-container {
+    width: 100%;
+    background: rgba(15, 10, 36, 0.9);
+    border: 2px solid #3d1b7c;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(188, 0, 221, 0.2);
+}
+
+.chat-header {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #00f3ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-box {
+    min-height: 80px;
+    margin-bottom: 20px;
+}
+
+.message-bubble {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #bc00dd;
+    line-height: 1.5;
+}
+
+/* इनपुट आणि बटन */
+.input-area {
+    display: flex;
+    gap: 10px;
+}
+
+#user-input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid #3d1b7c;
+    border-radius: 10px;
+    padding: 12px;
+    color: white;
+    outline: none;
+}
+
+#user-input:focus {
+    border-color: #00f3ff;
+}
+
+#ask-btn {
+    background: linear-gradient(45deg, #bc00dd, #00f3ff);
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#ask-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.5);
+}
 
