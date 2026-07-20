@@ -1,188 +1,274 @@
-// Configuration & State
-let voiceReplyEnabled = true;
+// Global State Variables
 let currentLanguage = 'en-US';
-let voiceSpeed = 1.0;
-let isRecording = false;
+let isVoiceEnabled = true;
+let isRecognitionActive = false;
+let recognition = null;
+let synth = window.speechSynthesis;
+let currentUtterance = null;
 
-// DOM Selectors
-const voiceToggleBtn = document.getElementById('voice-toggle-btn');
-const settingsBtn = document.getElementById('settings-btn');
-const micBtn = document.getElementById('mic-btn');
-const sendBtn = document.getElementById('send-btn');
-const userInput = document.getElementById('user-input');
-const chatMessages = document.getElementById('chat-messages');
-const settingsModal = document.getElementById('settings-modal');
-const closeModalX = document.getElementById('close-modal-x');
-const closeModalBtn = document.getElementById('close-modal-btn');
-const settingLang = document.getElementById('setting-lang');
-const settingSpeed = document.getElementById('setting-speed');
-const settingTheme = document.getElementById('setting-theme');
+// DOM Elements
+const userInput = document.getElementById('userInput');
+const chatBody = document.getElementById('chatBody');
+const micBtn = document.getElementById('micBtn');
+const voiceToggle = document.getElementById('voiceToggle');
+const settingsPanel = document.getElementById('settingsPanel');
+const avatarWrapper = document.getElementById('avatarWrapper');
+const visualizer = document.getElementById('visualizer');
+const btcVal = document.getElementById('btcVal');
+const niftyVal = document.getElementById('niftyVal');
 
-// System Welcome Greetings Map
-const welcomeGreetings = {
-    'en-US': "Hello Boss! 👋 Welcome back. I'm Swity AI, ready to assist you. What can I do for you today?",
-    'hi-IN': "नमस्ते बॉस! 👋 आपका स्वागत है। मैं स्वीटी एआई (Swity AI) हूँ, आपकी सेवा में हाजिर। आज मैं आपके लिए क्या कर सकती हूँ?",
-    'mr-IN': "हॅलो बॉस! 👋 तुमचे स्वागत आहे. मी स्वीटी एआय (Swity AI) आहे, तुमच्या सेवेसाठी सज्ज. आज मी तुमच्यासाठी काय करू शकते?"
-};
+// Initialize Event Listeners & Dummy Data Updates
+document.addEventListener('DOMContentLoaded', () => {
+    if (userInput) {
+        userInput.addEventListener('keydown', checkEnter);
+    }
+    initSpeechRecognition();
+    startLiveUpdates();
+    sendWelcomeMessage();
+});
 
-// 1. Initialize App & Set Welcome Message
-function initGreeting() {
-    if (chatMessages) {
-        chatMessages.innerHTML = ''; // Clear previous
-        const greetingText = welcomeGreetings[currentLanguage];
-        appendMessage(greetingText, 'ai');
-        speakText(greetingText);
+// 1. Welcome Reply
+function sendWelcomeMessage() {
+    let welcomeText = "Welcome back, Boss. I'm Swity, always ready to help you.";
+    appendMessageBubble(welcomeText, 'ai');
+    executeTextToSpeech(welcomeText);
+}
+
+// 2. Chat Input and Sending Mechanics
+function processUserMessage() {
+    if (!userInput) return;
+    const message = userInput.value.trim();
+    if (message === "") return;
+
+    appendMessageBubble(message, 'user');
+    userInput.value = "";
+
+    setTimeout(() => {
+        const reply = generateEngineReply(message);
+        appendMessageBubble(reply, 'ai');
+        executeTextToSpeech(reply);
+    }, 800);
+}
+
+function checkEnter(event) {
+    if (event.key === 'Enter') {
+        processUserMessage();
     }
 }
 
-// 2. Voice Toggle Feature
-if (voiceToggleBtn) {
-    voiceToggleBtn.addEventListener('click', () => {
-        voiceReplyEnabled = !voiceReplyEnabled;
-        if (voiceReplyEnabled) {
-            voiceToggleBtn.innerText = '🔊';
-            voiceToggleBtn.classList.remove('voice-off');
-        } else {
-            voiceToggleBtn.innerText = '🔇';
-            voiceToggleBtn.classList.add('voice-off');
-            window.speechSynthesis.cancel();
-        }
-    });
-}
-
-// 3. Settings Popup Logic
-if (settingsBtn && settingsModal) {
-    settingsBtn.addEventListener('click', () => {
-        settingsModal.classList.add('active');
-    });
-}
-
-function closePopup() {
-    if (settingsModal) settingsModal.classList.remove('active');
-}
-if (closeModalX) closeModalX.addEventListener('click', closePopup);
-if (closeModalBtn) closeModalBtn.addEventListener('click', closePopup);
-if (settingsModal) {
-    settingsModal.addEventListener('click', (e) => {
-        if (e.target === settingsModal) closePopup();
-    });
-}
-
-// 4. Handle Config Settings Changes
-if (settingLang) {
-    settingLang.addEventListener('change', (e) => {
-        currentLanguage = e.target.value;
-        initGreeting(); // Change greeting instantly when language updates
-    });
-}
-if (settingSpeed) {
-    settingSpeed.addEventListener('change', (e) => {
-        voiceSpeed = parseFloat(e.target.value);
-    });
-}
-if (settingTheme) {
-    settingTheme.addEventListener('change', (e) => {
-        document.body.className = e.target.value;
-    });
-}
-
-// 5. Text-to-Speech Engine
-function speakText(text) {
-    if (!voiceReplyEnabled) return;
-    window.speechSynthesis.cancel();
+function appendMessageBubble(text, sender) {
+    if (!chatBody) return;
+    const bubble = document.createElement('div');
+    bubble.className = `message-bubble ${sender}-message`;
+    bubble.style.margin = '10px';
+    bubble.style.padding = '10px';
+    bubble.style.borderRadius = '8px';
+    bubble.style.maxWidth = '75%';
     
-    // Clean emojis for clean speech syntax
-    const cleanText = text.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '');
-
-    const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = currentLanguage;
-    utterance.rate = voiceSpeed;
-
-    const voices = window.speechSynthesis.getVoices();
-    const match = voices.find(v => v.lang.includes(currentLanguage));
-    if (match) utterance.voice = match;
-
-    window.speechSynthesis.speak(utterance);
+    if (sender === 'user') {
+        bubble.style.backgroundColor = '#d1e7dd';
+        bubble.style.marginLeft = 'auto';
+    } else {
+        bubble.style.backgroundColor = '#e2e3e5';
+        bubble.style.marginRight = 'auto';
+    }
+    
+    bubble.innerText = text;
+    chatBody.appendChild(bubble);
+    chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-// Chrome fix for loading speech engines
-if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+// 3. AI Reply Generation Engine
+function generateEngineReply(message) {
+    const lowerMessage = message.toLowerCase();
+    
+    if (currentLanguage === 'hi-IN') {
+        if (lowerMessage.includes('hello') || lowerMessage.includes('नमस्ते')) {
+            return "नमस्ते बॉस, मैं स्विटी हूँ। मैं आपकी क्या मदद कर सकती हूँ?";
+        }
+        return "जी बॉस, मैंने समझ लिया। मैं इस पर काम कर रही हूँ।";
+    } else if (currentLanguage === 'mr-IN') {
+        if (lowerMessage.includes('hello') || lowerMessage.includes('नमस्कार')) {
+            return "नमस्कार बॉस, मी स्विटी आहे. मी तुम्हाला काय मदत करू शकते?";
+        }
+        return "होय बॉस, मला समजले. मी यावर काम करत आहे.";
+    } else {
+        if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+            return "Hello Boss! Swity here. How can I assist you today?";
+        }
+        if (lowerMessage.includes('name')) {
+            return "My name is Swity, Boss.";
+        }
+        return "I processed your request, Boss. Let me know if you need anything else.";
+    }
 }
 
-// 6. Speech Recognition (Mic Button)
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition;
+// 4. Text-To-Speech & Avatar Speaking Animation Triggers
+function executeTextToSpeech(text) {
+    if (!isVoiceEnabled || !synth) return;
 
-if (SpeechRecognition) {
+    synth.cancel();
+
+    currentUtterance = new SpeechSynthesisUtterance(text);
+    currentUtterance.lang = currentLanguage;
+
+    const voices = synth.getVoices();
+    const femaleVoice = voices.find(voice => 
+        voice.lang.startsWith(currentLanguage.split('-')[0]) && 
+        (voice.name.toLowerCase().includes('female') || voice.name.toLowerCase().includes('zira') || voice.name.toLowerCase().includes('google'))
+    );
+
+    if (femaleVoice) {
+        currentUtterance.voice = femaleVoice;
+    }
+
+    currentUtterance.onstart = () => {
+        triggerAvatarSpeaking(true);
+    };
+
+    currentUtterance.onend = () => {
+        triggerAvatarSpeaking(false);
+    };
+
+    currentUtterance.onerror = () => {
+        triggerAvatarSpeaking(false);
+    };
+
+    synth.speak(currentUtterance);
+}
+
+function triggerAvatarSpeaking(isSpeaking) {
+    if (!avatarWrapper) return;
+    if (isSpeaking) {
+        avatarWrapper.classList.add('speaking');
+        if (visualizer) visualizer.style.display = 'flex';
+    } else {
+        avatarWrapper.classList.remove('speaking');
+        if (visualizer) visualizer.style.display = 'none';
+    }
+}
+
+// 5. Speech Recognition
+function initSpeechRecognition() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        if (micBtn) micBtn.style.display = 'none';
+        return;
+    }
+
     recognition = new SpeechRecognition();
     recognition.continuous = false;
     recognition.interimResults = false;
 
-    recognition.onstart = () => { isRecording = true; micBtn.classList.add('recording'); };
-    recognition.onend = () => { isRecording = false; micBtn.classList.remove('recording'); };
-    recognition.onerror = () => { isRecording = false; micBtn.classList.remove('recording'); };
+    recognition.onstart = () => {
+        isRecognitionActive = true;
+        if (micBtn) micBtn.style.backgroundColor = '#ff4d4d';
+    };
+
     recognition.onresult = (event) => {
-        userInput.value = event.results[0][0].transcript;
-        handleSendMessage();
+        const resultText = event.results[0][0].transcript;
+        if (userInput) {
+            userInput.value = resultText;
+            processUserMessage();
+        }
+    };
+
+    recognition.onerror = () => {
+        isRecognitionActive = false;
+        if (micBtn) micBtn.style.backgroundColor = '';
+    };
+
+    recognition.onend = () => {
+        isRecognitionActive = false;
+        if (micBtn) micBtn.style.backgroundColor = '';
     };
 }
 
+function startSpeechRecognition() {
+    if (!recognition) return;
+    if (isRecognitionActive) {
+        recognition.stop();
+    } else {
+        recognition.lang = currentLanguage;
+        recognition.start();
+    }
+}
+
 if (micBtn) {
-    micBtn.addEventListener('click', () => {
-        if (!SpeechRecognition) {
-            alert("Speech API not supported in this browser.");
-            return;
-        }
-        if (isRecording) {
-            recognition.stop();
-        } else {
-            recognition.lang = currentLanguage;
-            recognition.start();
-        }
+    micBtn.addEventListener('click', startSpeechRecognition);
+}
+
+// 6. Feature Controls
+function toggleVoiceOutput() {
+    isVoiceEnabled = !isVoiceEnabled;
+    if (!isVoiceEnabled && synth) {
+        synth.cancel();
+        triggerAvatarSpeaking(false);
+    }
+    if (voiceToggle) {
+        voiceToggle.innerText = isVoiceEnabled ? "Voice: ON" : "Voice: OFF";
+    }
+}
+
+function toggleSettings() {
+    if (!settingsPanel) return;
+    settingsPanel.style.display = (settingsPanel.style.display === 'none' || settingsPanel.style.display === '') ? 'block' : 'none';
+}
+
+function setLanguage(langCode) {
+    if (langCode === 'en') currentLanguage = 'en-US';
+    if (langCode === 'hi') currentLanguage = 'hi-IN';
+    if (langCode === 'mr') currentLanguage = 'mr-IN';
+}
+
+// 7. Utility Controls
+function clearChat() {
+    if (chatBody) {
+        chatBody.innerHTML = '';
+        sendWelcomeMessage();
+    }
+}
+
+function downloadChat() {
+    if (!chatBody) return;
+    const messages = [];
+    const bubbles = chatBody.querySelectorAll('.message-bubble');
+    bubbles.forEach(bubble => {
+        const type = bubble.classList.contains('user-message') ? 'User: ' : 'Swity: ';
+        messages.push(type + bubble.innerText);
     });
+
+    const blob = new Blob([messages.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'swity_chat_history.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
-// 7. Message Engine Pipeline
-function appendMessage(text, sender) {
-    if (!chatMessages) return;
-    const msgDiv = document.createElement('div');
-    msgDiv.className = `message ${sender}-message`;
-    msgDiv.innerHTML = `<p>${text}</p>`;
-    chatMessages.appendChild(msgDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function handleSendMessage() {
-    const text = userInput.value.trim();
-    if (!text) return;
-
-    appendMessage(text, 'user');
-    userInput.value = '';
-
-    setTimeout(() => {
-        let reply = "";
-        if (currentLanguage === 'hi-IN') {
-            reply = "जी बॉस, मैंने आपकी बात समझ ली। बताइए और क्या सहायता करूँ?";
-        } else if (currentLanguage === 'mr-IN') {
-            reply = "होय बॉस, मला समजले. सांगा अजून काय मदत हवी आहे?";
-        } else {
-            reply = `Understood, Boss! I have processed: "${text}". What's next?`;
+function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
         }
-        appendMessage(reply, 'ai');
-        speakText(reply);
-    }, 600);
+    }
 }
 
-if (sendBtn) sendBtn.addEventListener('click', handleSendMessage);
-if (userInput) {
-    userInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSendMessage();
+// 8. Live BTC and Nifty Updates
+function startLiveUpdates() {
+    setInterval(() => {
+        if (btcVal) {
+            const randomBTC = (60000 + Math.random() * 5000).toFixed(2);
+            btcVal.innerText = `$${randomBTC}`;
         }
-    });
+        if (niftyVal) {
+            const randomNifty = (22000 + Math.random() * 500).toFixed(2);
+            niftyVal.innerText = `${randomNifty}`;
+        }
+    }, 3000);
 }
-
-// Initial Bootup trigger
-window.addEventListener('DOMContentLoaded', initGreeting);
