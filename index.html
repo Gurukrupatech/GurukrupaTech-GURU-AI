@@ -122,6 +122,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            transition: transform 0.3s ease;
         }
 
         .avatar {
@@ -157,9 +158,23 @@
         }
 
         /* Speaking Animation */
-        .speaking .avatar-ring {
+        .speaking .avatar-ring, .talking .avatar-ring {
             border-color: var(--secondary);
             animation: speak-ring 0.8s infinite alternate;
+        }
+
+        .speaking, .talking {
+            animation: bounce 0.4s infinite alternate, pulse-glow 0.4s infinite alternate;
+        }
+
+        @keyframes bounce {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px var(--primary); }
+            100% { box-shadow: 0 0 30px var(--secondary); }
         }
 
         @keyframes pulse-ring {
@@ -256,28 +271,29 @@
             <select id="languageSelect">
                 <option value="en-US">English (US)</option>
                 <option value="hi-IN">Hindi</option>
+                <option value="mr-IN">Marathi</option>
             </select>
-            <button id="voiceTestBtn">Voice Test</button>
+            <button id="voiceTestBtn" type="button">Voice Test</button>
         </div>
     </header>
 
     <div class="avatar-section">
         <div class="avatar-container" id="avatarContainer">
             <div class="avatar-ring"></div>
-            <div class="avatar">GURU</div>
+            <div class="avatar" id="swity-avatar">GURU</div>
         </div>
     </div>
 
     <div class="chat-box" id="chatBox">
-        <div class="message bot">
+        <div class="message bot" id="response-text">
             Hello! I am GURU AI by Trader Shiv. How can I assist you today?
         </div>
     </div>
 
     <div class="input-area">
         <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
-        <button id="voiceBtn" class="btn-voice" title="Voice Input">🎤</button>
-        <button id="askBtn">ASK</button>
+        <button id="voiceBtn" class="btn-voice" type="button" title="Voice Input">🎤</button>
+        <button id="askBtn" type="button">ASK</button>
     </div>
 
     <footer>
@@ -286,167 +302,219 @@
 </div>
 
 <script>
-    // Safe DOM Element References
-    const chatBox = document.getElementById('chatBox');
-    const userInput = document.getElementById('userInput');
-    const askBtn = document.getElementById('askBtn');
-    const voiceBtn = document.getElementById('voiceBtn');
-    const voiceTestBtn = document.getElementById('voiceTestBtn');
-    const languageSelect = document.getElementById('languageSelect');
-    const avatarContainer = document.getElementById('avatarContainer');
+    document.addEventListener('DOMContentLoaded', () => {
+        // DOM Element References
+        const chatBox = document.getElementById('chatBox');
+        const userInput = document.getElementById('userInput');
+        const askBtn = document.getElementById('askBtn');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const voiceTestBtn = document.getElementById('voiceTestBtn');
+        const languageSelect = document.getElementById('languageSelect');
+        const avatarContainer = document.getElementById('avatarContainer');
 
-    // Speech Recognition Initialization
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition = null;
-    let isListening = false;
+        // Speech Recognition Setup
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = null;
+        let isListening = false;
 
-    if (SpeechRecognition) {
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-
-        recognition.onstart = function() {
-            isListening = true;
-            if (voiceBtn) voiceBtn.classList.add('active');
-            if (avatarContainer) avatarContainer.classList.add('listening');
-        };
-
-        recognition.onresult = function(event) {
-            const transcript = event.results[0][0].transcript;
-            if (userInput) {
-                userInput.value = transcript;
-            }
-            handleSend();
-        };
-
-        recognition.onerror = function(event) {
-            console.warn('Speech recognition error:', event.error);
-            stopListening();
-        };
-
-        recognition.onend = function() {
-            stopListening();
-        };
-    } else {
-        if (voiceBtn) voiceBtn.style.display = 'none';
-        console.warn('Speech Recognition is not supported in this browser.');
-    }
-
-    function startListening() {
-        if (!recognition || isListening) return;
-        try {
-            stopSpeech(); // Stop speech before starting recognition to avoid loop/feedback
-            recognition.lang = languageSelect ? languageSelect.value : 'en-US';
-            recognition.start();
-        } catch (e) {
-            console.error('Error starting recognition:', e);
-            stopListening();
-        }
-    }
-
-    function stopListening() {
-        isListening = false;
-        if (voiceBtn) voiceBtn.classList.remove('active');
-        if (avatarContainer) avatarContainer.classList.remove('listening');
-        if (recognition) {
+        if (SpeechRecognition) {
             try {
-                recognition.stop();
-            } catch (e) {}
-        }
-    }
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
 
-    // Toggle Voice Input safely
-    if (voiceBtn) {
-        voiceBtn.addEventListener('click', () => {
-            if (isListening) {
+                recognition.onstart = function() {
+                    isListening = true;
+                    if (voiceBtn) voiceBtn.classList.add('active');
+                    if (avatarContainer) avatarContainer.classList.add('listening');
+                };
+
+                recognition.onresult = function(event) {
+                    if (event.results && event.results[0] && event.results[0][0]) {
+                        const transcript = event.results[0][0].transcript;
+                        if (userInput) {
+                            userInput.value = transcript;
+                        }
+                        handleSend();
+                    }
+                };
+
+                recognition.onerror = function(event) {
+                    console.warn('Speech recognition error:', event.error);
+                    stopListening();
+                };
+
+                recognition.onend = function() {
+                    stopListening();
+                };
+            } catch (e) {
+                console.error("Speech recognition error:", e);
+            }
+        } else {
+            if (voiceBtn) voiceBtn.style.display = 'none';
+        }
+
+        function startListening() {
+            if (!recognition) {
+                alert('Speech recognition is not supported on this device/browser.');
+                return;
+            }
+            if (isListening) return;
+
+            try {
+                stopSpeech();
+                recognition.lang = languageSelect ? languageSelect.value : 'en-US';
+                recognition.start();
+            } catch (e) {
+                console.error('Error starting recognition:', e);
                 stopListening();
-            } else {
-                startListening();
             }
-        });
-    }
-
-    // Speech Synthesis Management
-    function stopSpeech() {
-        if ('speechSynthesis' in window) {
-            window.speechSynthesis.cancel();
         }
-        if (avatarContainer) avatarContainer.classList.remove('speaking');
-    }
 
-    function speakText(text) {
-        if (!('speechSynthesis' in window)) return;
-
-        stopSpeech(); // Prevent TTS overlap
-
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = languageSelect ? languageSelect.value : 'en-US';
-
-        utterance.onstart = function() {
-            if (avatarContainer) avatarContainer.classList.add('speaking');
-        };
-
-        utterance.onend = function() {
-            if (avatarContainer) avatarContainer.classList.remove('speaking');
-        };
-
-        utterance.onerror = function() {
-            if (avatarContainer) avatarContainer.classList.remove('speaking');
-        };
-
-        window.speechSynthesis.speak(utterance);
-    }
-
-    // Chat Logic
-    function appendMessage(text, sender) {
-        if (!chatBox) return;
-        const msgDiv = document.createElement('div');
-        msgDiv.classList.add('message', sender);
-        msgDiv.textContent = text;
-        chatBox.appendChild(msgDiv);
-        chatBox.scrollTop = chatBox.scrollHeight;
-    }
-
-    function handleSend() {
-        if (!userInput) return;
-        const text = userInput.value.trim();
-        if (!text) return;
-
-        appendMessage(text, 'user');
-        userInput.value = '';
-
-        // Response handling
-        setTimeout(() => {
-            let responseText = "GURU AI process completed for: " + text;
-            if (text.toLowerCase().includes("hello") || text.toLowerCase().includes("hi")) {
-                responseText = "Welcome! GURU AI by Trader Shiv is at your service.";
-            } else if (text.toLowerCase().includes("trader shiv")) {
-                responseText = "Trader Shiv provides high-tech trading and automation solutions with GurukrupaTech.";
+        function stopListening() {
+            isListening = false;
+            if (voiceBtn) voiceBtn.classList.remove('active');
+            if (avatarContainer) avatarContainer.classList.remove('listening');
+            if (recognition) {
+                try {
+                    recognition.stop();
+                } catch (e) {}
             }
-            appendMessage(responseText, 'bot');
-            speakText(responseText);
-        }, 400);
-    }
+        }
 
-    // Event Listeners
-    if (askBtn) askBtn.addEventListener('click', handleSend);
+        if (voiceBtn) {
+            voiceBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (isListening) {
+                    stopListening();
+                } else {
+                    startListening();
+                }
+            });
+        }
 
-    if (userInput) {
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
+        // Speech Synthesis Setup
+        function stopSpeech() {
+            if ('speechSynthesis' in window) {
+                try {
+                    window.speechSynthesis.cancel();
+                } catch(e) {}
+            }
+            if (avatarContainer) {
+                avatarContainer.classList.remove('speaking');
+                avatarContainer.classList.remove('talking');
+            }
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+
+            stopSpeech();
+
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
+                utterance.lang = selectedLang;
+                utterance.rate = 1.0;
+
+                utterance.onstart = function() {
+                    if (avatarContainer) {
+                        avatarContainer.classList.add('speaking');
+                        avatarContainer.classList.add('talking');
+                    }
+                };
+
+                utterance.onend = function() {
+                    if (avatarContainer) {
+                        avatarContainer.classList.remove('speaking');
+                        avatarContainer.classList.remove('talking');
+                    }
+                };
+
+                utterance.onerror = function() {
+                    if (avatarContainer) {
+                        avatarContainer.classList.remove('speaking');
+                        avatarContainer.classList.remove('talking');
+                    }
+                };
+
+                window.speechSynthesis.speak(utterance);
+            } catch (e) {
+                console.error("Speech synthesis error:", e);
+                if (avatarContainer) {
+                    avatarContainer.classList.remove('speaking');
+                    avatarContainer.classList.remove('talking');
+                }
+            }
+        }
+
+        // Chat Interaction Logic
+        function appendMessage(text, sender) {
+            if (!chatBox) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.classList.add('message', sender);
+            msgDiv.textContent = text;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function handleSend() {
+            if (!userInput) return;
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            appendMessage(text, 'user');
+            userInput.value = '';
+
+            setTimeout(() => {
+                let responseText = "GURU AI process completed for: " + text;
+                const lowerText = text.toLowerCase();
+                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
+
+                if (selectedLang === 'mr-IN') {
+                    responseText = "मी तुमची मदत करण्यास तयार आहे! तुम्ही विचारलेला प्रश्न मला समजला: " + text;
+                } else if (lowerText.includes("hello") || lowerText.includes("hi")) {
+                    responseText = "Welcome! GURU AI by Trader Shiv is at your service.";
+                } else if (lowerText.includes("trader shiv")) {
+                    responseText = "Trader Shiv provides high-tech trading and automation solutions with GurukrupaTech.";
+                }
+
+                appendMessage(responseText, 'bot');
+                speakText(responseText);
+            }, 400);
+        }
+
+        // Event Listeners
+        if (askBtn) {
+            askBtn.addEventListener('click', (e) => {
+                e.preventDefault();
                 handleSend();
-            }
-        });
-    }
+            });
+        }
 
-    if (voiceTestBtn) {
-        voiceTestBtn.addEventListener('click', () => {
-            const testMsg = "Voice test successful. GURU AI audio system is online.";
-            speakText(testMsg);
-        });
-    }
+        if (userInput) {
+            userInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleSend();
+                }
+            });
+        }
+
+        if (voiceTestBtn) {
+            voiceTestBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
+                let testMsg = "Voice test successful. GURU AI audio system is online.";
+                if (selectedLang === 'mr-IN') {
+                    testMsg = "आवाज चाचणी यशस्वी झाली. गुरु एआय सिस्टीम तयार आहे.";
+                } else if (selectedLang === 'hi-IN') {
+                    testMsg = "वॉइस टेस्ट सफल रहा। गुरु एआई ऑडियो सिस्टम चालू है।";
+                }
+                speakText(testMsg);
+            });
+        }
+    });
 </script>
 </body>
 </html>
-console.log("Speech Synthesis Supported:", 'speechSynthesis' in window);
-console.log("Voices:", speechSynthesis.getVoices());
