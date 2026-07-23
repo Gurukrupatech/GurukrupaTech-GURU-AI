@@ -6,118 +6,110 @@
     <title>GURU AI | GurukrupaTech</title>
     <style>
         :root {
-            --bg-color: #0d0f18;
-            --card-bg: rgba(22, 27, 46, 0.65);
-            --border-color: rgba(0, 240, 255, 0.2);
-            --primary: #00f0ff;
-            --secondary: #ff007f;
-            --text-color: #e0e6ed;
-            --text-dim: #8a99ad;
+            --bg-color: #05070d;
+            --card-bg: rgba(13, 18, 30, 0.85);
+            --border-color: rgba(0, 210, 255, 0.25);
+            --primary: #00e5ff;
+            --secondary: #e02498;
+            --text-color: #ffffff;
+            --text-dim: #7a8b9e;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 127, 0.08) 0%, transparent 40%);
+                radial-gradient(circle at 50% 20%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(224, 36, 152, 0.05) 0%, transparent 50%);
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px;
+            padding: 12px;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
+            max-width: 420px;
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(0, 240, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            height: 85vh;
+            height: 92vh;
+            max-height: 820px;
         }
 
         header {
-            padding: 15px 25px;
-            border-bottom: 1px solid var(--border-color);
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.15);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(13, 15, 24, 0.4);
-        }
-
-        .branding {
-            display: flex;
-            flex-direction: column;
         }
 
         .branding h1 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: var(--primary);
-            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
-            letter-spacing: 1px;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: 1.5px;
         }
 
         .branding span {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-dim);
+            font-weight: 600;
+            display: block;
+            margin-top: 2px;
         }
 
         .controls {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
 
-        select, button {
-            background: rgba(0, 240, 255, 0.05);
-            border: 1px solid var(--border-color);
+        select, .btn-header {
+            background: rgba(13, 22, 38, 0.8);
+            border: 1px solid rgba(0, 210, 255, 0.3);
             color: var(--text-color);
-            padding: 8px 14px;
+            padding: 8px 12px;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
             outline: none;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 600;
         }
 
-        select option {
-            background: #161b2e;
-            color: var(--text-color);
-        }
-
-        button:hover {
-            background: rgba(0, 240, 255, 0.2);
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        .btn-header {
+            text-align: center;
+            white-space: nowrap;
         }
 
         .avatar-section {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.15);
-            border-bottom: 1px solid var(--border-color);
+            padding: 35px 20px;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.15);
         }
 
         .avatar-container {
             position: relative;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -126,136 +118,136 @@
         }
 
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 95px;
+            height: 95px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #00d2ff 0%, #e02498 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
-            z-index: 2;
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: #ffffff;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
         }
 
-        .avatar-ring {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        /* Listening Animation */
-        .listening .avatar-ring {
-            border-color: var(--primary);
+        .listening .avatar {
             animation: pulse-ring 1.5s infinite;
         }
 
-        /* Speaking Animation */
-        .speaking .avatar-ring, .talking .avatar-ring {
-            border-color: var(--secondary);
-            animation: speak-ring 0.8s infinite alternate;
-        }
-
-        .speaking, .talking {
+        .speaking .avatar, .talking .avatar {
             animation: bounce 0.4s infinite alternate, pulse-glow 0.4s infinite alternate;
         }
 
         @keyframes bounce {
             0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+            100% { transform: scale(1.06); }
         }
 
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 15px var(--primary); }
-            100% { box-shadow: 0 0 30px var(--secondary); }
+            100% { box-shadow: 0 0 35px var(--secondary); }
         }
 
         @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); }
-            70% { transform: scale(1.15); opacity: 0; box-shadow: 0 0 0 15px rgba(0, 240, 255, 0); }
-            100% { transform: scale(0.95); opacity: 0; }
-        }
-
-        @keyframes speak-ring {
-            0% { transform: scale(1); box-shadow: 0 0 5px var(--secondary); }
-            100% { transform: scale(1.1); box-shadow: 0 0 20px var(--secondary); }
+            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 18px rgba(0, 229, 255, 0); }
+            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
         }
 
         .chat-box {
             flex: 1;
-            padding: 20px;
+            padding: 20px 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .message {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.4;
+            max-width: 85%;
+            padding: 14px 16px;
+            border-radius: 16px;
+            font-size: 0.92rem;
+            line-height: 1.45;
             word-wrap: break-word;
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background: rgba(0, 240, 255, 0.15);
-            border: 1px solid rgba(0, 240, 255, 0.3);
-            border-bottom-right-radius: 2px;
+            font-weight: 500;
         }
 
         .message.bot {
             align-self: flex-start;
-            background: rgba(255, 0, 127, 0.15);
-            border: 1px solid rgba(255, 0, 127, 0.3);
-            border-bottom-left-radius: 2px;
+            background: rgba(65, 12, 50, 0.65);
+            border: 1px solid rgba(224, 36, 152, 0.4);
+            color: #ffffff;
+            border-top-left-radius: 4px;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: rgba(0, 100, 130, 0.45);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            color: #ffffff;
+            border-top-right-radius: 4px;
         }
 
         .input-area {
-            padding: 15px 20px;
-            border-top: 1px solid var(--border-color);
+            padding: 14px 16px;
             display: flex;
             gap: 10px;
-            background: rgba(13, 15, 24, 0.4);
+            background: rgba(9, 13, 22, 0.6);
+            align-items: center;
         }
 
         .input-area input {
             flex: 1;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            padding: 12px 15px;
-            border-radius: 8px;
+            background: rgba(10, 16, 28, 0.9);
+            border: 1px solid rgba(0, 210, 255, 0.25);
+            padding: 12px 16px;
+            border-radius: 10px;
             color: var(--text-color);
             outline: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+        }
+
+        .input-area input::placeholder {
+            color: var(--text-dim);
         }
 
         .input-area input:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
         }
 
-        .btn-voice.active {
-            background: rgba(255, 0, 127, 0.3);
+        .btn-mic {
+            background: rgba(10, 16, 28, 0.9);
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            color: var(--text-color);
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .btn-mic.active {
+            background: rgba(224, 36, 152, 0.4);
             border-color: var(--secondary);
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+            box-shadow: 0 0 12px rgba(224, 36, 152, 0.6);
         }
 
         footer {
             text-align: center;
-            padding: 8px;
-            font-size: 0.7rem;
+            padding: 12px;
+            font-size: 0.72rem;
             color: var(--text-dim);
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(0, 210, 255, 0.1);
+            font-weight: 500;
         }
     </style>
 </head>
@@ -264,8 +256,8 @@
 <div class="container">
     <header>
         <div class="branding">
-            <h1>GURU AI</h1>
-            <span>GurukrupaTech | Trader Shiv</span>
+            <h1>GURU<br>AI</h1>
+            <span>GurukrupaTech<br>| Trader Shiv</span>
         </div>
         <div class="controls">
             <select id="languageSelect">
@@ -273,27 +265,25 @@
                 <option value="hi-IN">Hindi</option>
                 <option value="mr-IN">Marathi</option>
             </select>
-            <button id="voiceTestBtn" type="button">Voice Test</button>
+            <button id="voiceTestBtn" class="btn-header" type="button">Voice<br>Test</button>
         </div>
     </header>
 
     <div class="avatar-section">
         <div class="avatar-container" id="avatarContainer">
-            <div class="avatar-ring"></div>
-            <div class="avatar" id="swity-avatar">GURU</div>
+            <div class="avatar">GURU</div>
         </div>
     </div>
 
     <div class="chat-box" id="chatBox">
-        <div class="message bot" id="response-text">
+        <div class="message bot">
             Hello! I am GURU AI by Trader Shiv. How can I assist you today?
         </div>
     </div>
 
     <div class="input-area">
         <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
-        <button id="voiceBtn" class="btn-voice" type="button" title="Voice Input">🎤</button>
-        <button id="askBtn" type="button">ASK</button>
+        <button id="voiceBtn" class="btn-mic" type="button" title="Voice Input">🎤</button>
     </div>
 
     <footer>
@@ -303,16 +293,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // DOM Element References
         const chatBox = document.getElementById('chatBox');
         const userInput = document.getElementById('userInput');
-        const askBtn = document.getElementById('askBtn');
         const voiceBtn = document.getElementById('voiceBtn');
         const voiceTestBtn = document.getElementById('voiceTestBtn');
         const languageSelect = document.getElementById('languageSelect');
         const avatarContainer = document.getElementById('avatarContainer');
 
-        // Speech Recognition Setup
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isListening = false;
@@ -348,10 +335,10 @@
                     stopListening();
                 };
             } catch (e) {
-                console.error("Speech recognition error:", e);
+                console.error("Speech recognition initialization error:", e);
             }
         } else {
-            if (voiceBtn) voiceBtn.style.display = 'none';
+            if (voiceBtn) voiceBtn.style.opacity = '0.5';
         }
 
         function startListening() {
@@ -393,7 +380,6 @@
             });
         }
 
-        // Speech Synthesis Setup
         function stopSpeech() {
             if ('speechSynthesis' in window) {
                 try {
@@ -448,7 +434,6 @@
             }
         }
 
-        // Chat Interaction Logic
         function appendMessage(text, sender) {
             if (!chatBox) return;
             const msgDiv = document.createElement('div');
@@ -482,14 +467,6 @@
                 appendMessage(responseText, 'bot');
                 speakText(responseText);
             }, 400);
-        }
-
-        // Event Listeners
-        if (askBtn) {
-            askBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                handleSend();
-            });
         }
 
         if (userInput) {
