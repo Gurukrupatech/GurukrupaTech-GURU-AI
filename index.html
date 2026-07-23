@@ -1,542 +1,450 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GurukrupaTech - Guru AI</title>
+    <title>GURU AI | GurukrupaTech</title>
     <style>
-        /* --- EXISTING UI DESIGN (DO NOT MODIFY) --- */
+        :root {
+            --bg-color: #0d0f18;
+            --card-bg: rgba(22, 27, 46, 0.65);
+            --border-color: rgba(0, 240, 255, 0.2);
+            --primary: #00f0ff;
+            --secondary: #ff007f;
+            --text-color: #e0e6ed;
+            --text-dim: #8a99ad;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background-color: #020108;
+            background-color: var(--bg-color);
             background-image: 
-                radial-gradient(circle at 50% 20%, rgba(0, 243, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 60%, rgba(188, 0, 221, 0.12) 0%, transparent 60%),
-                radial-gradient(circle at 10% 10%, rgba(0, 243, 255, 0.05) 0%, transparent 30%),
-                radial-gradient(circle at 90% 80%, rgba(188, 0, 221, 0.05) 0%, transparent 30%);
-            color: #fff;
+                radial-gradient(circle at 10% 20%, rgba(0, 240, 255, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 127, 0.08) 0%, transparent 40%);
+            color: var(--text-color);
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             padding: 20px;
-            overflow-x: hidden;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 36, 0.3) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(18, 16, 36, 0.3) 1px, transparent 1px);
-            background-size: 30px 30px;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .main-container {
+        .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 800px;
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37), 0 0 15px rgba(0, 240, 255, 0.1);
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+            height: 85vh;
         }
 
-        .brand-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .brand-title {
-            font-size: 2.4rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #00f3ff 30%, #ff007f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.6));
-        }
-
-        .brand-subtitle {
-            font-size: 1.3rem;
-            color: #00f3ff;
-            font-weight: 700;
-            letter-spacing: 6px;
-            margin-top: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-
-        .tag-badge {
-            display: inline-block;
-            background: rgba(255, 165, 0, 0.1);
-            border: 1px solid #ffaa00;
-            color: #ffaa00;
-            padding: 3px 15px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-top: 8px;
-            text-transform: uppercase;
-            text-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
-        }
-
-        .avatar-stage {
-            position: relative;
-            width: 270px;
-            height: 270px;
-            margin-bottom: 25px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .outer-cyber-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px dashed rgba(0, 243, 255, 0.6);
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
-            animation: rotateClockwise 15s linear infinite;
-            transition: all 0.3s ease;
-        }
-
-        .inner-cyber-ring {
-            position: absolute;
-            width: 90%;
-            height: 90%;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            border-top: 3px solid #bc00dd;
-            border-bottom: 3px solid #00f3ff;
-            box-shadow: 0 0 15px rgba(188, 0, 221, 0.4);
-            animation: rotateCounterClockwise 8s linear infinite;
-        }
-
-        .avatar-mask {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            overflow: hidden;
-            z-index: 2;
-            border: 4px solid #fff;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
-            background: #0d0b21;
-            /* Constant Natural Breathing/Idle Animation */
-            animation: naturalBreathing 4s ease-in-out infinite alternate;
-        }
-
-        .avatar-mask img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-            transition: transform 0.2s ease;
-        }
-
-        @keyframes rotateClockwise {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes rotateCounterClockwise {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        /* --- ADDED PREMIUM ANIMATIONS WITHOUT BREAKING UI --- */
-        @keyframes naturalBreathing {
-            0% { transform: scale(1) translateY(0); }
-            100% { transform: scale(1.015) translateY(-2px); }
-        }
-
-        /* Advanced Lip Sync & Face Mimicry Illusion via Matrix Transform */
-        .speaking-active .avatar-mask img {
-            animation: lipSyncSimulation 0.15s ease-in-out infinite alternate;
-        }
-
-        @keyframes lipSyncSimulation {
-            0% { transform: scale(1) scaleY(1); }
-            100% { transform: scale(1.02) scaleY(0.97) skewX(0.5deg); }
-        }
-
-        /* Voice Wave Reactive Ring Mode */
-        .speaking-active .outer-cyber-ring {
-            animation: rotateClockwise 2s linear infinite, voiceWavePulse 0.3s ease-in-out infinite alternate;
-            border-color: #ff007f;
-            border-style: solid;
-        }
-
-        @keyframes voiceWavePulse {
-            0% { box-shadow: 0 0 15px #ff007f, inset 0 0 10px #00f3ff; transform: scale(1); }
-            100% { box-shadow: 0 0 35px #00f3ff, inset 0 0 20px #ff007f; transform: scale(1.06); }
-        }
-
-        /* Listening Pulse State */
-        .listening-active .outer-cyber-ring {
-            border-color: #00f3ff;
-            box-shadow: 0 0 40px #00f3ff;
-            animation: rotateClockwise 4s linear infinite, listenPulse 0.6s infinite alternate;
-        }
-
-        @keyframes listenPulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            100% { transform: scale(1.04); opacity: 1; }
-        }
-
-        /* Chat box UI */
-        .chat-panel {
-            width: 100%;
-            background: rgba(12, 8, 28, 0.85);
-            border: 1.5px solid rgba(0, 243, 255, 0.2);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.6), 0 0 30px rgba(188, 0, 221, 0.15);
-            backdrop-filter: blur(12px);
-        }
-
-        .control-bar {
+        header {
+            padding: 15px 25px;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            padding-bottom: 12px;
+            background: rgba(13, 15, 24, 0.4);
         }
 
-        .left-controls {
+        .branding {
             display: flex;
-            gap: 8px;
+            flex-direction: column;
         }
 
-        .sys-btn {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            color: #00f3ff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
+        .branding h1 {
+            font-size: 1.4rem;
+            color: var(--primary);
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+            letter-spacing: 1px;
+        }
+
+        .branding span {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        select, button {
+            background: rgba(0, 240, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        select option {
+            background: #161b2e;
+            color: var(--text-color);
+        }
+
+        button:hover {
+            background: rgba(0, 240, 255, 0.2);
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .avatar-section {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 5px;
-            transition: all 0.2s;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.15);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .sys-btn:hover {
-            background: rgba(0, 243, 255, 0.2);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .settings-panel {
+        .avatar-container {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
             display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
-            color: #bc00dd;
-            font-size: 0.9rem;
         }
 
-        .lang-dropdown {
-            background: #0c081c;
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
             color: #fff;
-            border: 1px solid #bc00dd;
-            padding: 4px 8px;
-            border-radius: 10px;
-            outline: none;
-            font-size: 0.8rem;
-            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            z-index: 2;
         }
 
-        .display-area {
-            min-height: 95px;
-            margin-bottom: 18px;
-        }
-
-        .chat-bubble {
-            background: rgba(22, 14, 48, 0.7);
-            padding: 16px;
-            border-radius: 16px;
-            border-left: 4px solid #bc00dd;
-            line-height: 1.6;
-            font-size: 0.95rem;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        }
-
-        .input-container {
-            display: flex;
-            align-items: center;
-            background: rgba(4, 2, 12, 0.9);
-            border: 1px solid rgba(61, 27, 124, 0.8);
-            border-radius: 14px;
-            padding: 4px 12px;
-            margin-bottom: 15px;
-        }
-
-        .input-container:focus-within {
-            border-color: #00f3ff;
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
-        }
-
-        #chat-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            padding: 12px 5px;
-            color: white;
-            outline: none;
-            font-size: 0.95rem;
-        }
-
-        #submit-btn {
+        .avatar-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            background: linear-gradient(90deg, #9d00ff, #00f3ff);
-            color: white;
-            border: none;
-            padding: 15px 0;
-            border-radius: 14px;
-            font-weight: 700;
-            font-size: 1.25rem;
-            letter-spacing: 3px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(157, 0, 255, 0.4);
-            transition: all 0.3s;
-            text-transform: uppercase;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
-        #submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px rgba(0, 243, 255, 0.6);
+        /* Listening Animation */
+        .listening .avatar-ring {
+            border-color: var(--primary);
+            animation: pulse-ring 1.5s infinite;
         }
 
-        #submit-btn:disabled {
-            background: #2a2540;
-            color: #666;
-            box-shadow: none;
-            cursor: not-allowed;
+        /* Speaking Animation */
+        .speaking .avatar-ring {
+            border-color: var(--secondary);
+            animation: speak-ring 0.8s infinite alternate;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.7); }
+            70% { transform: scale(1.15); opacity: 0; box-shadow: 0 0 0 15px rgba(0, 240, 255, 0); }
+            100% { transform: scale(0.95); opacity: 0; }
+        }
+
+        @keyframes speak-ring {
+            0% { transform: scale(1); box-shadow: 0 0 5px var(--secondary); }
+            100% { transform: scale(1.1); box-shadow: 0 0 20px var(--secondary); }
+        }
+
+        .chat-box {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: rgba(0, 240, 255, 0.15);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            border-bottom-right-radius: 2px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: rgba(255, 0, 127, 0.15);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            border-bottom-left-radius: 2px;
+        }
+
+        .input-area {
+            padding: 15px 20px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+            background: rgba(13, 15, 24, 0.4);
+        }
+
+        .input-area input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            border-radius: 8px;
+            color: var(--text-color);
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .input-area input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+        }
+
+        .btn-voice.active {
+            background: rgba(255, 0, 127, 0.3);
+            border-color: var(--secondary);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            padding: 8px;
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
     </style>
 </head>
 <body>
 
-    <div class="main-container">
-        <div class="brand-header">
-            <div class="brand-title">GurukrupaTech</div>
-            <div class="brand-subtitle">Guru AI</div>
-            <div class="tag-badge">TRADER SHIV</div>
+<div class="container">
+    <header>
+        <div class="branding">
+            <h1>GURU AI</h1>
+            <span>GurukrupaTech | Trader Shiv</span>
         </div>
-
-        <div class="avatar-stage" id="avatar-container-block">
-            <div class="outer-cyber-ring"></div>
-            <div class="inner-cyber-ring"></div>
-            <div class="avatar-mask">
-                <img src="swity-avatar.png" alt="Swity AI" id="swity-img">
-            </div>
+        <div class="controls">
+            <select id="languageSelect">
+                <option value="en-US">English (US)</option>
+                <option value="hi-IN">Hindi</option>
+            </select>
+            <button id="voiceTestBtn">Voice Test</button>
         </div>
+    </header>
 
-        <div class="chat-panel">
-            <div class="control-bar">
-                <div class="left-controls">
-                    <button class="sys-btn" id="voice-test-trigger">🔊 Voice</button>
-                </div>
-                <div class="settings-panel">
-                    ⚙️ <select class="lang-dropdown" id="sys-lang">
-                        <option value="mr-IN">मराठी</option>
-                        <option value="hi-IN">Hindi</option>
-                        <option value="en-US">English</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="display-area">
-                <div class="chat-bubble" id="response-screen">
-                    Hello! BOSS 👋 I am Swity, your AI Assistant. How can I help you today?
-                </div>
-            </div>
-
-            <div class="input-container">
-                <input type="text" id="chat-input" placeholder="Type your message here...">
-            </div>
-
-            <button id="submit-btn">ASK</button>
+    <div class="avatar-section">
+        <div class="avatar-container" id="avatarContainer">
+            <div class="avatar-ring"></div>
+            <div class="avatar">GURU</div>
         </div>
     </div>
 
-    <script>
-        const submitBtn = document.getElementById('submit-btn');
-        const voiceTestTrigger = document.getElementById('voice-test-trigger');
-        const voiceInputTrigger = document.getElementById('voice-input-trigger');
-        const sysLang = document.getElementById('sys-lang');
-        const avatarContainerBlock = document.getElementById('avatar-container-block');
-        const responseScreen = document.getElementById('response-screen');
-        const chatInput = document.getElementById('chat-input');
+    <div class="chat-box" id="chatBox">
+        <div class="message bot">
+            Hello! I am GURU AI by Trader Shiv. How can I assist you today?
+        </div>
+    </div>
 
-        let continuousWakeWordRecognition;
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
+        <button id="voiceBtn" class="btn-voice" title="Voice Input">🎤</button>
+        <button id="askBtn">ASK</button>
+    </div>
 
-        // Natural Cute Female Voice Selection
-        function getCuteFemaleVoice(lang) {
-            if (!('speechSynthesis' in window)) return null;
-            const voices = window.speechSynthesis.getVoices();
-            
-            // Filter patterns for soft, non-robotic female voices
-            let targets = [];
-            if (lang.startsWith('en')) {
-                targets = ['Google UK English Female', 'Microsoft Zira', 'Hazel', 'Susan', 'Female'];
-            } else if (lang.startsWith('hi')) {
-                targets = ['Google हिन्दी', 'Kalpana', 'Microsoft Hemant', 'Female'];
-            } else if (lang.startsWith('mr')) {
-                targets = ['Google मराठी', 'Female'];
+    <footer>
+        &copy; GurukrupaTech - Powered by Trader Shiv
+    </footer>
+</div>
+
+<script>
+    // Safe DOM Element References
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const askBtn = document.getElementById('askBtn');
+    const voiceBtn = document.getElementById('voiceBtn');
+    const voiceTestBtn = document.getElementById('voiceTestBtn');
+    const languageSelect = document.getElementById('languageSelect');
+    const avatarContainer = document.getElementById('avatarContainer');
+
+    // Speech Recognition Initialization
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+    let isListening = false;
+
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = function() {
+            isListening = true;
+            if (voiceBtn) voiceBtn.classList.add('active');
+            if (avatarContainer) avatarContainer.classList.add('listening');
+        };
+
+        recognition.onresult = function(event) {
+            const transcript = event.results[0][0].transcript;
+            if (userInput) {
+                userInput.value = transcript;
             }
+            handleSend();
+        };
 
-            for (let name of targets) {
-                let found = voices.find(v => v.name.includes(name));
-                if (found) return found;
+        recognition.onerror = function(event) {
+            console.warn('Speech recognition error:', event.error);
+            stopListening();
+        };
+
+        recognition.onend = function() {
+            stopListening();
+        };
+    } else {
+        if (voiceBtn) voiceBtn.style.display = 'none';
+        console.warn('Speech Recognition is not supported in this browser.');
+    }
+
+    function startListening() {
+        if (!recognition || isListening) return;
+        try {
+            stopSpeech(); // Stop speech before starting recognition to avoid loop/feedback
+            recognition.lang = languageSelect ? languageSelect.value : 'en-US';
+            recognition.start();
+        } catch (e) {
+            console.error('Error starting recognition:', e);
+            stopListening();
+        }
+    }
+
+    function stopListening() {
+        isListening = false;
+        if (voiceBtn) voiceBtn.classList.remove('active');
+        if (avatarContainer) avatarContainer.classList.remove('listening');
+        if (recognition) {
+            try {
+                recognition.stop();
+            } catch (e) {}
+        }
+    }
+
+    // Toggle Voice Input safely
+    if (voiceBtn) {
+        voiceBtn.addEventListener('click', () => {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
             }
-            return voices.find(v => v.lang.startsWith(lang.split('-')[0])) || null;
+        });
+    }
+
+    // Speech Synthesis Management
+    function stopSpeech() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
         }
+        if (avatarContainer) avatarContainer.classList.remove('speaking');
+    }
 
-        // Voice Engine Output & State Handling
-        function triggerVoiceSynthesis(textToSpeak) {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-                const utterance = new SpeechSynthesisUtterance(textToSpeak);
-                
-                const selectedVoice = getCuteFemaleVoice(sysLang.value);
-                if (selectedVoice) utterance.voice = selectedVoice;
-                
-                utterance.lang = sysLang.value;
-                utterance.rate = 0.95; // Slightly slower for natural melody
-                utterance.pitch = 1.15; // Slightly higher pitch for cute tone
+    function speakText(text) {
+        if (!('speechSynthesis' in window)) return;
 
-                utterance.onstart = () => {
-                    responseScreen.innerText = textToSpeak;
-                    avatarContainerBlock.classList.remove('listening-active');
-                    avatarContainerBlock.classList.add('speaking-active');
-                    submitBtn.disabled = true;
-                };
+        stopSpeech(); // Prevent TTS overlap
 
-                utterance.onend = () => {
-                    avatarContainerBlock.classList.remove('speaking-active');
-                    submitBtn.disabled = false;
-                };
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = languageSelect ? languageSelect.value : 'en-US';
 
-                window.speechSynthesis.speak(utterance);
+        utterance.onstart = function() {
+            if (avatarContainer) avatarContainer.classList.add('speaking');
+        };
+
+        utterance.onend = function() {
+            if (avatarContainer) avatarContainer.classList.remove('speaking');
+        };
+
+        utterance.onerror = function() {
+            if (avatarContainer) avatarContainer.classList.remove('speaking');
+        };
+
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // Chat Logic
+    function appendMessage(text, sender) {
+        if (!chatBox) return;
+        const msgDiv = document.createElement('div');
+        msgDiv.classList.add('message', sender);
+        msgDiv.textContent = text;
+        chatBox.appendChild(msgDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function handleSend() {
+        if (!userInput) return;
+        const text = userInput.value.trim();
+        if (!text) return;
+
+        appendMessage(text, 'user');
+        userInput.value = '';
+
+        // Response handling
+        setTimeout(() => {
+            let responseText = "GURU AI process completed for: " + text;
+            if (text.toLowerCase().includes("hello") || text.toLowerCase().includes("hi")) {
+                responseText = "Welcome! GURU AI by Trader Shiv is at your service.";
+            } else if (text.toLowerCase().includes("trader shiv")) {
+                responseText = "Trader Shiv provides high-tech trading and automation solutions with GurukrupaTech.";
             }
-        }
+            appendMessage(responseText, 'bot');
+            speakText(responseText);
+        }, 400);
+    }
 
-        // Process Responses with Thinking State
-        function processAIRequest() {
-            const query = chatInput.value.trim();
-            if (query === "") return;
+    // Event Listeners
+    if (askBtn) askBtn.addEventListener('click', handleSend);
 
-            chatInput.value = "";
-            responseScreen.innerHTML = "Thinking<span class='thinking-dots'>...</span>";
-            
-            // Add custom style for animated thinking dots dynamically without touching core CSS
-            if (!document.getElementById('dots-style')) {
-                const style = document.createElement('style');
-                style.id = 'dots-style';
-                style.innerHTML = `
-                    @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; } }
-                    .thinking-dots::after { content: '.'; animation: dots 1s infinite steps(5, end); }
-                `;
-                document.head.appendChild(style);
+    if (userInput) {
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSend();
             }
+        });
+    }
 
-            // Simulate slight thinking delay for realism
-            setTimeout(() => {
-                let finalReply = "";
-                const currentLang = sysLang.value;
-
-                if (currentLang === 'mr-IN') {
-                    finalReply = "होय बॉस ❤️, मी गुरु एआय आहे. मी तुमची मदत करण्यास पूर्णपणे तयार आहे.";
-                } else if (currentLang === 'hi-IN') {
-                    finalReply = "जी बॉस ❤️, मैं गुरु एआई हूँ। मैं आपकी सहायता के लिए बिल्कुल तैयार हूँ।";
-                } else {
-                    finalReply = "Hello Boss ❤️. I'm Guru AI. I am always ready to assist you.";
-                }
-
-                triggerVoiceSynthesis(finalReply);
-            }, 1200);
-        }
-
-        // Speech-to-Text Mic Handling
-        if ('webkitSpeechRecognition' in window || 'speechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognizer = new SpeechRecognition();
-            recognizer.continuous = false;
-            recognizer.interimResults = false;
-
-            voiceInputTrigger.addEventListener('click', () => {
-                try {
-                    recognizer.lang = sysLang.value;
-                    recognizer.start();
-                    avatarContainerBlock.classList.add('listening-active');
-                    responseScreen.innerText = "Listening Engine Active... 🎙️";
-                } catch(e) { console.log("Recognition already active"); }
-            });
-
-            recognizer.onresult = function(event) {
-                const speechToTextResult = event.results[0][0].transcript;
-                chatInput.value = speechToTextResult;
-                avatarContainerBlock.classList.remove('listening-active');
-                processAIRequest();
-            };
-
-            recognizer.onerror = () => {
-                avatarContainerBlock.classList.remove('listening-active');
-            };
-
-            // BACKGROUND WAKE WORD ENGINE ("Hello Boss")
-            continuousWakeWordRecognition = new SpeechRecognition();
-            continuousWakeWordRecognition.continuous = true;
-            continuousWakeWordRecognition.interimResults = false;
-            continuousWakeWordRecognition.lang = 'en-US';
-
-            continuousWakeWordRecognition.onresult = function(event) {
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        const transcript = event.results[i][0].transcript.toLowerCase().trim();
-                        if (transcript.includes("hello boss")) {
-                            triggerVoiceSynthesis("Hello Boss ❤️. I'm Guru AI. I'm listening.");
-                        }
-                    }
-                }
-            };
-
-            continuousWakeWordRecognition.onend = () => {
-                // Ensure it restarts automatically to stay always active
-                continuousWakeWordRecognition.start();
-            };
-
-            // Start Wake Word Engine on first interaction
-            window.addEventListener('click', () => {
-                try { continuousWakeWordRecognition.start(); } catch(e){}
-            }, { once: true });
-
-        } else {
-            voiceInputTrigger.style.display = 'none';
-        }
-
-        // Setup Triggers
-        submitBtn.addEventListener('click', processAIRequest);
-        chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') processAIRequest(); });
-        voiceTestTrigger.addEventListener('click', () => triggerVoiceSynthesis("Hello Boss ❤️ Voice connection secure. I am online."));
-        
-        // Ensure voices load fully in chromium browsers
-        if ('speechSynthesis' in window) { window.speechSynthesis.onvoiceschanged = () => {}; }
-    </script>
+    if (voiceTestBtn) {
+        voiceTestBtn.addEventListener('click', () => {
+            const testMsg = "Voice test successful. GURU AI audio system is online.";
+            speakText(testMsg);
+        });
+    }
+</script>
 </body>
 </html>
