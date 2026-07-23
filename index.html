@@ -3,18 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GURU AI | GurukrupaTech</title>
+    <title>GURUKRUPATECH GURU-AI</title>
     <style>
-        :root {
-            --bg-color: #05070d;
-            --card-bg: rgba(13, 18, 30, 0.85);
-            --border-color: rgba(0, 210, 255, 0.25);
-            --primary: #00e5ff;
-            --secondary: #e02498;
-            --text-color: #ffffff;
-            --text-dim: #7a8b9e;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
@@ -23,231 +13,354 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 50% 20%, rgba(0, 229, 255, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(224, 36, 152, 0.05) 0%, transparent 50%);
-            color: var(--text-color);
+            background-color: #030811;
+            color: #ffffff;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 12px;
+            padding: 10px;
         }
 
         .container {
             width: 100%;
-            max-width: 420px;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-            overflow: hidden;
+            max-width: 410px;
+            height: 94vh;
+            max-height: 850px;
+            background: #030b18;
+            border: 1.5 solid #005f7f;
+            border-radius: 28px;
+            box-shadow: 0 0 25px rgba(0, 168, 225, 0.25);
             display: flex;
             flex-direction: column;
-            height: 92vh;
-            max-height: 820px;
+            overflow: hidden;
+            position: relative;
         }
 
+        /* Outer Glow Border Simulation */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border-radius: 28px;
+            border: 1px solid #00f0ff;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        /* Header UI */
         header {
-            padding: 18px 20px;
-            border-bottom: 1px solid rgba(0, 210, 255, 0.15);
+            padding: 18px 20px 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 5;
         }
 
-        .branding h1 {
+        .icon-btn {
+            background: transparent;
+            border: none;
+            color: #00f0ff;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-title {
+            text-align: center;
+        }
+
+        .header-title .brand {
+            color: #00f0ff;
+            font-size: 0.7rem;
+            letter-spacing: 2.5px;
+            font-weight: 700;
+        }
+
+        .header-title h1 {
+            color: #ffffff;
             font-size: 1.5rem;
-            color: var(--primary);
             font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
         }
 
-        .branding span {
-            font-size: 0.72rem;
-            color: var(--text-dim);
+        /* Top Action Buttons */
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 20px 15px 20px;
+            z-index: 5;
+        }
+
+        .action-pill {
+            background: rgba(4, 25, 45, 0.7);
+            border: 1px solid #0088cc;
+            border-radius: 20px;
+            padding: 8px 18px;
+            color: #ffffff;
+            font-size: 0.8rem;
             font-weight: 600;
-            display: block;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 136, 204, 0.2);
+        }
+
+        /* Avatar Section */
+        .avatar-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 0;
+            z-index: 5;
+        }
+
+        .avatar-outer-ring {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,240,255,0.1) 0%, rgba(0,0,0,0) 70%);
+            border: 2px solid #00f0ff;
+            box-shadow: 0 0 20px #00f0ff, inset 0 0 15px #00f0ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-inner {
+            width: 105px;
+            height: 105px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+        }
+
+        .avatar-inner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .assistant-title {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .assistant-title h2 {
+            font-size: 1.25rem;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .assistant-title p {
+            font-size: 0.8rem;
+            color: #00f0ff;
             margin-top: 2px;
         }
 
-        .controls {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        select, .btn-header {
-            background: rgba(13, 22, 38, 0.8);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            outline: none;
-            font-size: 0.82rem;
-            font-weight: 600;
-        }
-
-        .btn-header {
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .avatar-section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 35px 20px;
-            border-bottom: 1px solid rgba(0, 210, 255, 0.15);
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        .avatar {
-            width: 95px;
-            height: 95px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #00d2ff 0%, #e02498 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 800;
-            font-size: 1.35rem;
-            color: #ffffff;
-            letter-spacing: 1px;
-            box-shadow: 0 0 25px rgba(0, 210, 255, 0.4);
-        }
-
-        .listening .avatar {
-            animation: pulse-ring 1.5s infinite;
-        }
-
-        .speaking .avatar, .talking .avatar {
-            animation: bounce 0.4s infinite alternate, pulse-glow 0.4s infinite alternate;
-        }
-
-        @keyframes bounce {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.06); }
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 15px var(--primary); }
-            100% { box-shadow: 0 0 35px var(--secondary); }
-        }
-
-        @keyframes pulse-ring {
-            0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.7); }
-            70% { transform: scale(1.08); box-shadow: 0 0 0 18px rgba(0, 229, 255, 0); }
-            100% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(0, 229, 255, 0); }
-        }
-
-        .chat-box {
+        /* Main Screen Box & Globe Background */
+        .display-screen {
             flex: 1;
-            padding: 20px 16px;
+            margin: 15px 16px;
+            border: 1px solid #00a8e1;
+            border-radius: 20px;
+            background: rgba(2, 14, 28, 0.85);
+            box-shadow: inset 0 0 15px rgba(0, 168, 225, 0.2);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+        }
+
+        .globe-bg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            background: radial-gradient(circle, rgba(0, 255, 128, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            border: 1px dashed rgba(0, 255, 128, 0.25);
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .globe-bg::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 128, 0.15);
+            transform: scale(0.8);
+        }
+
+        /* Chat Messages */
+        .chat-area {
+            flex: 1;
             overflow-y: auto;
+            z-index: 2;
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .message {
+        .bot-msg-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
             max-width: 85%;
-            padding: 14px 16px;
-            border-radius: 16px;
-            font-size: 0.92rem;
-            line-height: 1.45;
-            word-wrap: break-word;
-            font-weight: 500;
         }
 
-        .message.bot {
-            align-self: flex-start;
-            background: rgba(65, 12, 50, 0.65);
-            border: 1px solid rgba(224, 36, 152, 0.4);
+        .bot-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid #00f0ff;
+            background: #000;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .bot-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .msg-content {
+            background: rgba(0, 40, 60, 0.7);
+            border: 1px solid #0088cc;
+            border-radius: 14px;
+            border-top-left-radius: 2px;
+            padding: 12px 14px;
+        }
+
+        .msg-text {
+            font-size: 0.88rem;
+            line-height: 1.4;
             color: #ffffff;
-            border-top-left-radius: 4px;
         }
 
-        .message.user {
+        .msg-time {
+            font-size: 0.68rem;
+            color: #5a7b9c;
+            margin-top: 6px;
+        }
+
+        .user-msg {
             align-self: flex-end;
-            background: rgba(0, 100, 130, 0.45);
-            border: 1px solid rgba(0, 229, 255, 0.4);
-            color: #ffffff;
-            border-top-right-radius: 4px;
+            background: rgba(0, 100, 140, 0.6);
+            border: 1px solid #00f0ff;
+            border-radius: 14px;
+            border-top-right-radius: 2px;
+            padding: 10px 14px;
+            color: #fff;
+            font-size: 0.88rem;
+            max-width: 80%;
         }
 
-        .input-area {
-            padding: 14px 16px;
+        /* Text Input Row */
+        .input-row {
+            padding: 0 16px 12px 16px;
             display: flex;
             gap: 10px;
-            background: rgba(9, 13, 22, 0.6);
+            z-index: 5;
+        }
+
+        .input-box {
+            flex: 1;
+            background: rgba(2, 14, 28, 0.9);
+            border: 1px solid #0088cc;
+            border-radius: 25px;
+            padding: 0 18px;
+            display: flex;
             align-items: center;
         }
 
-        .input-area input {
-            flex: 1;
-            background: rgba(10, 16, 28, 0.9);
-            border: 1px solid rgba(0, 210, 255, 0.25);
-            padding: 12px 16px;
-            border-radius: 10px;
-            color: var(--text-color);
+        .input-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
             outline: none;
+            color: #fff;
             font-size: 0.9rem;
+            padding: 12px 0;
         }
 
-        .input-area input::placeholder {
-            color: var(--text-dim);
+        .input-box input::placeholder {
+            color: #4a6a8a;
         }
 
-        .input-area input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-        }
-
-        .btn-mic {
-            background: rgba(10, 16, 28, 0.9);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            color: var(--text-color);
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
+        .send-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            background: #0088cc;
+            border: 1px solid #00f0ff;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+            font-size: 1.1rem;
         }
 
-        .btn-mic.active {
-            background: rgba(224, 36, 152, 0.4);
-            border-color: var(--secondary);
-            box-shadow: 0 0 12px rgba(224, 36, 152, 0.6);
+        /* Bottom Controls */
+        .bottom-actions {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 16px 16px 16px;
+            z-index: 5;
         }
 
-        footer {
-            text-align: center;
-            padding: 12px;
-            font-size: 0.72rem;
-            color: var(--text-dim);
-            border-top: 1px solid rgba(0, 210, 255, 0.1);
-            font-weight: 500;
+        .bottom-pill {
+            background: rgba(4, 25, 45, 0.8);
+            border: 1px solid #0088cc;
+            border-radius: 20px;
+            padding: 10px 16px;
+            color: #ffffff;
+            font-size: 0.78rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+        }
+
+        /* Dynamic Animations for Avatar */
+        .listening .avatar-outer-ring {
+            animation: pulse-ring 1.5s infinite;
+        }
+
+        .speaking .avatar-outer-ring {
+            animation: bounce-glow 0.5s infinite alternate;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 10px #00f0ff, inset 0 0 10px #00f0ff; }
+            50% { box-shadow: 0 0 30px #00f0ff, inset 0 0 20px #00f0ff; }
+            100% { box-shadow: 0 0 10px #00f0ff, inset 0 0 10px #00f0ff; }
+        }
+
+        @keyframes bounce-glow {
+            0% { transform: scale(1); box-shadow: 0 0 15px #00f0ff; }
+            100% { transform: scale(1.05); box-shadow: 0 0 35px #00f0ff; }
         }
     </style>
 </head>
@@ -255,51 +368,87 @@
 
 <div class="container">
     <header>
-        <div class="branding">
-            <h1>GURU<br>AI</h1>
-            <span>GurukrupaTech<br>| Trader Shiv</span>
+        <button class="icon-btn" type="button">☰</button>
+        <div class="header-title">
+            <div class="brand">GURUKRUPATECH</div>
+            <h1>GURU-AI</h1>
         </div>
-        <div class="controls">
-            <select id="languageSelect">
-                <option value="en-US">English (US)</option>
-                <option value="hi-IN">Hindi</option>
-                <option value="mr-IN">Marathi</option>
-            </select>
-            <button id="voiceTestBtn" class="btn-header" type="button">Voice<br>Test</button>
-        </div>
+        <button class="icon-btn" type="button">⚙</button>
     </header>
 
+    <div class="top-actions">
+        <button class="action-pill" id="topMicBtn" type="button">
+            🎤 MIC
+        </button>
+        <button class="action-pill" id="voiceTestBtn" type="button">
+            🔊 VOICE
+        </button>
+    </div>
+
     <div class="avatar-section">
-        <div class="avatar-container" id="avatarContainer">
-            <div class="avatar">GURU</div>
+        <div class="avatar-outer-ring" id="avatarRing">
+            <div class="avatar-inner">
+                <img src="https://i.ibb.co/L5342Wj/swity-avatar.png" alt="Swity AI Avatar" id="swityAvatarImg" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712109.png'">
+            </div>
+        </div>
+        <div class="assistant-title">
+            <h2>Swity AI Assistant</h2>
+            <p>Your Personal AI Companion</p>
         </div>
     </div>
 
-    <div class="chat-box" id="chatBox">
-        <div class="message bot">
-            Hello! I am GURU AI by Trader Shiv. How can I assist you today?
+    <div class="display-screen">
+        <div class="globe-bg"></div>
+        <div class="chat-area" id="chatArea">
+            <div class="bot-msg-container">
+                <div class="bot-icon">
+                    <img src="https://i.ibb.co/L5342Wj/swity-avatar.png" alt="Swity" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712109.png'">
+                </div>
+                <div class="msg-content">
+                    <div class="msg-text">Hello! I'm Swity, your assistant. How can I help you today?</div>
+                    <div class="msg-time" id="greetingTime">04:35 PM</div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="input-area">
-        <input type="text" id="userInput" placeholder="Type your message..." autocomplete="off">
-        <button id="voiceBtn" class="btn-mic" type="button" title="Voice Input">🎤</button>
+    <div class="input-row">
+        <div class="input-box">
+            <input type="text" id="userInput" placeholder="Ask anything..." autocomplete="off">
+        </div>
+        <button class="send-btn" id="sendBtn" type="button">➤</button>
     </div>
 
-    <footer>
-        &copy; GurukrupaTech - Powered by Trader Shiv
-    </footer>
+    <div class="bottom-actions">
+        <button class="bottom-pill" id="bottomMicBtn" type="button">
+            🎤 MIC
+        </button>
+        <button class="bottom-pill" id="settingsBtn" type="button">
+            ⚙ SETTINGS
+        </button>
+        <button class="bottom-pill" id="bottomVoiceBtn" type="button">
+            🔊 VOICE
+        </button>
+    </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const chatBox = document.getElementById('chatBox');
         const userInput = document.getElementById('userInput');
-        const voiceBtn = document.getElementById('voiceBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatArea = document.getElementById('chatArea');
+        const avatarRing = document.getElementById('avatarRing');
+        const topMicBtn = document.getElementById('topMicBtn');
+        const bottomMicBtn = document.getElementById('bottomMicBtn');
         const voiceTestBtn = document.getElementById('voiceTestBtn');
-        const languageSelect = document.getElementById('languageSelect');
-        const avatarContainer = document.getElementById('avatarContainer');
+        const bottomVoiceBtn = document.getElementById('bottomVoiceBtn');
+        const greetingTime = document.getElementById('greetingTime');
 
+        // Set Real Time
+        const now = new Date();
+        greetingTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        // Web Speech APIs
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         let recognition = null;
         let isListening = false;
@@ -308,189 +457,139 @@
             try {
                 recognition = new SpeechRecognition();
                 recognition.continuous = false;
-                recognition.interimResults = false;
+                recognition.lang = 'en-US';
 
-                recognition.onstart = function() {
+                recognition.onstart = () => {
                     isListening = true;
-                    if (voiceBtn) voiceBtn.classList.add('active');
-                    if (avatarContainer) avatarContainer.classList.add('listening');
+                    avatarRing.classList.add('listening');
                 };
 
-                recognition.onresult = function(event) {
-                    if (event.results && event.results[0] && event.results[0][0]) {
-                        const transcript = event.results[0][0].transcript;
-                        if (userInput) {
-                            userInput.value = transcript;
-                        }
-                        handleSend();
-                    }
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    userInput.value = transcript;
+                    handleSend();
                 };
 
-                recognition.onerror = function(event) {
-                    console.warn('Speech recognition error:', event.error);
-                    stopListening();
-                };
-
-                recognition.onend = function() {
-                    stopListening();
-                };
+                recognition.onerror = () => stopListening();
+                recognition.onend = () => stopListening();
             } catch (e) {
-                console.error("Speech recognition initialization error:", e);
+                console.error(e);
             }
-        } else {
-            if (voiceBtn) voiceBtn.style.opacity = '0.5';
         }
 
         function startListening() {
             if (!recognition) {
-                alert('Speech recognition is not supported on this device/browser.');
+                alert("Speech recognition is not supported on this browser.");
                 return;
             }
             if (isListening) return;
-
+            stopSpeech();
             try {
-                stopSpeech();
-                recognition.lang = languageSelect ? languageSelect.value : 'en-US';
                 recognition.start();
-            } catch (e) {
-                console.error('Error starting recognition:', e);
+            } catch(e) {
                 stopListening();
             }
         }
 
         function stopListening() {
             isListening = false;
-            if (voiceBtn) voiceBtn.classList.remove('active');
-            if (avatarContainer) avatarContainer.classList.remove('listening');
+            avatarRing.classList.remove('listening');
             if (recognition) {
-                try {
-                    recognition.stop();
-                } catch (e) {}
+                try { recognition.stop(); } catch(e){}
             }
-        }
-
-        if (voiceBtn) {
-            voiceBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (isListening) {
-                    stopListening();
-                } else {
-                    startListening();
-                }
-            });
         }
 
         function stopSpeech() {
             if ('speechSynthesis' in window) {
-                try {
-                    window.speechSynthesis.cancel();
-                } catch(e) {}
+                window.speechSynthesis.cancel();
             }
-            if (avatarContainer) {
-                avatarContainer.classList.remove('speaking');
-                avatarContainer.classList.remove('talking');
-            }
+            avatarRing.classList.remove('speaking');
         }
 
         function speakText(text) {
             if (!('speechSynthesis' in window)) return;
-
             stopSpeech();
 
-            try {
-                const utterance = new SpeechSynthesisUtterance(text);
-                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
-                utterance.lang = selectedLang;
-                utterance.rate = 1.0;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0;
 
-                utterance.onstart = function() {
-                    if (avatarContainer) {
-                        avatarContainer.classList.add('speaking');
-                        avatarContainer.classList.add('talking');
-                    }
-                };
+            utterance.onstart = () => {
+                avatarRing.classList.add('speaking');
+            };
 
-                utterance.onend = function() {
-                    if (avatarContainer) {
-                        avatarContainer.classList.remove('speaking');
-                        avatarContainer.classList.remove('talking');
-                    }
-                };
+            utterance.onend = () => {
+                avatarRing.classList.remove('speaking');
+            };
 
-                utterance.onerror = function() {
-                    if (avatarContainer) {
-                        avatarContainer.classList.remove('speaking');
-                        avatarContainer.classList.remove('talking');
-                    }
-                };
+            utterance.onerror = () => {
+                avatarRing.classList.remove('speaking');
+            };
 
-                window.speechSynthesis.speak(utterance);
-            } catch (e) {
-                console.error("Speech synthesis error:", e);
-                if (avatarContainer) {
-                    avatarContainer.classList.remove('speaking');
-                    avatarContainer.classList.remove('talking');
-                }
-            }
+            window.speechSynthesis.speak(utterance);
         }
 
-        function appendMessage(text, sender) {
-            if (!chatBox) return;
-            const msgDiv = document.createElement('div');
-            msgDiv.classList.add('message', sender);
-            msgDiv.textContent = text;
-            chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
+        function appendUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'user-msg';
+            div.textContent = text;
+            chatArea.appendChild(div);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function appendBotMessage(text) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            const container = document.createElement('div');
+            container.className = 'bot-msg-container';
+            container.innerHTML = `
+                <div class="bot-icon">
+                    <img src="https://i.ibb.co/L5342Wj/swity-avatar.png" alt="Swity" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712109.png'">
+                </div>
+                <div class="msg-content">
+                    <div class="msg-text">${text}</div>
+                    <div class="msg-time">${timeStr}</div>
+                </div>
+            `;
+            chatArea.appendChild(container);
+            chatArea.scrollTop = chatArea.scrollHeight;
         }
 
         function handleSend() {
-            if (!userInput) return;
             const text = userInput.value.trim();
             if (!text) return;
 
-            appendMessage(text, 'user');
+            appendUserMessage(text);
             userInput.value = '';
 
             setTimeout(() => {
-                let responseText = "GURU AI process completed for: " + text;
-                const lowerText = text.toLowerCase();
-                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
-
-                if (selectedLang === 'mr-IN') {
-                    responseText = "मी तुमची मदत करण्यास तयार आहे! तुम्ही विचारलेला प्रश्न मला समजला: " + text;
-                } else if (lowerText.includes("hello") || lowerText.includes("hi")) {
-                    responseText = "Welcome! GURU AI by Trader Shiv is at your service.";
-                } else if (lowerText.includes("trader shiv")) {
-                    responseText = "Trader Shiv provides high-tech trading and automation solutions with GurukrupaTech.";
+                let reply = "I am Swity AI. I got your message: " + text;
+                const lower = text.toLowerCase();
+                if (lower.includes("hello") || lower.includes("hi")) {
+                    reply = "Hello! Swity here to help you.";
+                } else if (lower.includes("gurukrupatech") || lower.includes("guru")) {
+                    reply = "GurukrupaTech AI system is ready for automation.";
                 }
-
-                appendMessage(responseText, 'bot');
-                speakText(responseText);
-            }, 400);
+                appendBotMessage(reply);
+                speakText(reply);
+            }, 500);
         }
 
-        if (userInput) {
-            userInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    handleSend();
-                }
-            });
-        }
+        // Event Listeners
+        sendBtn.addEventListener('click', handleSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
 
-        if (voiceTestBtn) {
-            voiceTestBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const selectedLang = languageSelect ? languageSelect.value : 'en-US';
-                let testMsg = "Voice test successful. GURU AI audio system is online.";
-                if (selectedLang === 'mr-IN') {
-                    testMsg = "आवाज चाचणी यशस्वी झाली. गुरु एआय सिस्टीम तयार आहे.";
-                } else if (selectedLang === 'hi-IN') {
-                    testMsg = "वॉइस टेस्ट सफल रहा। गुरु एआई ऑडियो सिस्टम चालू है।";
-                }
-                speakText(testMsg);
-            });
-        }
+        topMicBtn.addEventListener('click', () => isListening ? stopListening() : startListening());
+        bottomMicBtn.addEventListener('click', () => isListening ? stopListening() : startListening());
+
+        const testVoiceAction = () => {
+            const msg = "Voice system test successful. Swity AI is online.";
+            appendBotMessage(msg);
+            speakText(msg);
+        };
+
+        voiceTestBtn.addEventListener('click', testVoiceAction);
+        bottomVoiceBtn.addEventListener('click', testVoiceAction);
     });
 </script>
 </body>
