@@ -535,6 +535,9 @@ body, html {
   justify-content: space-between;
   gap: 8px;
   z-index: 3;
+  
+position: relative;
+    bottom: 20px;
 }
 
 .nav-btn {
