@@ -699,28 +699,32 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 }
 
 /* Mobile Screens Ke Liye Adjustment */
+@
+/* Mobile Screens */
 @media screen and (max-width: 480px) {
-    .chat-container {
-        max-height: 52vh;
+
+    .chat-container{
+        max-height:52vh;
     }
-    
-    .input-section {
-        padding: 8px 10px;
-  .nav-btn{
-    width: 95px;
-    height: 45px;
-    padding: 8px;
-    border-radius: 25px;
-    font-size: 14px;
+
+    .input-section{
+        padding:8px 10px;
+    }
+
+    .nav-btn{
+        width:95px;
+        height:45px;
+        padding:6px;
+        border-radius:20px;
+        font-size:12px;
+    }
+
+    .nav-btn i{
+        font-size:16px;
+        margin-bottom:2px;
+    }
+
+    .nav-btn span{
+        font-size:11px;
+    }
 }
-
-.nav-btn i{
-    font-size: 16px;
-    margin-bottom: 2px;
-}
-
-.nav-btn span{
-    font-size: 12px;
-}  
-
-
