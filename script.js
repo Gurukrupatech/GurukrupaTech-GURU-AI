@@ -190,13 +190,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if (query.includes('hello') || query.includes('hi') || query.includes('namaste')) {
     return `Hello Boss! 👋
 
-I'm Swity AI by GURUKRUPATECH.
+I'm Swity AI by GurukrupaTech.
 
 Your intelligent AI companion for Trading, Coding, Technology, Learning, Creativity, and Smart Solutions.
 
 How may I assist you today?`;
   } else if (query.includes('who are you') || query.includes('kaun ho')) {
-    return "Main Swity hoon, GURUKRUPATECH aur TRADER SHIV ki AI Assistant.";
+    return "Main Swity hoon, GurukrupaTech aur TRADER SHIV ki AI Assistant.";
   } else if (query.includes('time') || query.includes('samay')) {
     return `Abhi ka samay ${getCurrentTime()} hai.`;
   } else {
