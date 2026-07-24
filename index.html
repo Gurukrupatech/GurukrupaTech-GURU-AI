@@ -1,595 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GURUKRUPATECH GURU-AI</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        body {
-            background-color: #030811;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 410px;
-            height: 94vh;
-            max-height: 850px;
-            background: #030b18;
-            border: 1.5 solid #005f7f;
-            border-radius: 28px;
-            box-shadow: 0 0 25px rgba(0, 168, 225, 0.25);
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Outer Glow Border Simulation */
-        .container::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 28px;
-            border: 1px solid #00f0ff;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        /* Header UI */
-        header {
-            padding: 18px 20px 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 5;
-        }
-
-        .icon-btn {
-            background: transparent;
-            border: none;
-            color: #00f0ff;
-            font-size: 1.4rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header-title {
-            text-align: center;
-        }
-
-        .header-title .brand {
-            color: #00f0ff;
-            font-size: 0.7rem;
-            letter-spacing: 2.5px;
-            font-weight: 700;
-        }
-
-        .header-title h1 {
-            color: #ffffff;
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-        }
-
-        /* Top Action Buttons */
-        .top-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 20px 15px 20px;
-            z-index: 5;
-        }
-
-        .action-pill {
-            background: rgba(4, 25, 45, 0.7);
-            border: 1px solid #0088cc;
-            border-radius: 20px;
-            padding: 8px 18px;
-            color: #ffffff;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 136, 204, 0.2);
-        }
-
-        /* Avatar Section */
-        .avatar-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 10px 0;
-            z-index: 5;
-        }
-
-        .avatar-outer-ring {
-            width: 125px;
-            height: 125px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,240,255,0.1) 0%, rgba(0,0,0,0) 70%);
-            border: 2px solid #00f0ff;
-            box-shadow: 0 0 20px #00f0ff, inset 0 0 15px #00f0ff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-
-        .avatar-inner {
-            width: 105px;
-            height: 105px;
-            border-radius: 50%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #000;
-        }
-
-        .avatar-inner img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .assistant-title {
-            text-align: center;
-            margin-top: 12px;
-        }
-
-        .assistant-title h2 {
-            font-size: 1.25rem;
-            color: #ffffff;
-            font-weight: 700;
-        }
-
-        .assistant-title p {
-            font-size: 0.8rem;
-            color: #00f0ff;
-            margin-top: 2px;
-        }
-
-        /* Main Screen Box & Globe Background */
-        .display-screen {
-            flex: 1;
-            margin: 15px 16px;
-            border: 1px solid #00a8e1;
-            border-radius: 20px;
-            background: rgba(2, 14, 28, 0.85);
-            box-shadow: inset 0 0 15px rgba(0, 168, 225, 0.2);
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-        }
-
-        .globe-bg {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 260px;
-            height: 260px;
-            background: radial-gradient(circle, rgba(0, 255, 128, 0.08) 0%, transparent 70%);
-            border-radius: 50%;
-            border: 1px dashed rgba(0, 255, 128, 0.25);
-            pointer-events: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .globe-bg::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 1px solid rgba(0, 255, 128, 0.15);
-            transform: scale(0.8);
-        }
-
-        /* Chat Messages */
-        .chat-area {
-            flex: 1;
-            overflow-y: auto;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .bot-msg-container {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            max-width: 85%;
-        }
-
-        .bot-icon {
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            border: 1px solid #00f0ff;
-            background: #000;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .bot-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .msg-content {
-            background: rgba(0, 40, 60, 0.7);
-            border: 1px solid #0088cc;
-            border-radius: 14px;
-            border-top-left-radius: 2px;
-            padding: 12px 14px;
-        }
-
-        .msg-text {
-            font-size: 0.88rem;
-            line-height: 1.4;
-            color: #ffffff;
-        }
-
-        .msg-time {
-            font-size: 0.68rem;
-            color: #5a7b9c;
-            margin-top: 6px;
-        }
-
-        .user-msg {
-            align-self: flex-end;
-            background: rgba(0, 100, 140, 0.6);
-            border: 1px solid #00f0ff;
-            border-radius: 14px;
-            border-top-right-radius: 2px;
-            padding: 10px 14px;
-            color: #fff;
-            font-size: 0.88rem;
-            max-width: 80%;
-        }
-
-        /* Text Input Row */
-        .input-row {
-            padding: 0 16px 12px 16px;
-            display: flex;
-            gap: 10px;
-            z-index: 5;
-        }
-
-        .input-box {
-            flex: 1;
-            background: rgba(2, 14, 28, 0.9);
-            border: 1px solid #0088cc;
-            border-radius: 25px;
-            padding: 0 18px;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-box input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #fff;
-            font-size: 0.9rem;
-            padding: 12px 0;
-        }
-
-        .input-box input::placeholder {
-            color: #4a6a8a;
-        }
-
-        .send-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 50%;
-            background: #0088cc;
-            border: 1px solid #00f0ff;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
-            font-size: 1.1rem;
-        }
-
-        /* Bottom Controls */
-        .bottom-actions {
-            display: flex;
-            justify-content: space-between;
-            padding: 0 16px 16px 16px;
-            z-index: 5;
-        }
-
-        .bottom-pill {
-            background: rgba(4, 25, 45, 0.8);
-            border: 1px solid #0088cc;
-            border-radius: 20px;
-            padding: 10px 16px;
-            color: #ffffff;
-            font-size: 0.78rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            letter-spacing: 0.5px;
-        }
-
-        /* Dynamic Animations for Avatar */
-        .listening .avatar-outer-ring {
-            animation: pulse-ring 1.5s infinite;
-        }
-
-        .speaking .avatar-outer-ring {
-            animation: bounce-glow 0.5s infinite alternate;
-        }
-
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 10px #00f0ff, inset 0 0 10px #00f0ff; }
-            50% { box-shadow: 0 0 30px #00f0ff, inset 0 0 20px #00f0ff; }
-            100% { box-shadow: 0 0 10px #00f0ff, inset 0 0 10px #00f0ff; }
-        }
-
-        @keyframes bounce-glow {
-            0% { transform: scale(1); box-shadow: 0 0 15px #00f0ff; }
-            100% { transform: scale(1.05); box-shadow: 0 0 35px #00f0ff; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GURUKRUPATECH - GURU AI</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <button class="icon-btn" type="button">☰</button>
-        <div class="header-title">
-            <div class="brand">GURUKRUPATECH</div>
-            <h1>GURU-AI</h1>
+  <div class="cyberpunk-bg"></div>
+  <div class="neon-particles-bg"></div>
+
+  <div class="app-container">
+
+    <div class="circuit-border top-left"></div>
+    <div class="circuit-border top-right"></div>
+    <div class="circuit-border bottom-left"></div>
+    <div class="circuit-border bottom-right"></div>
+
+    <header class="app-header">
+      <button class="icon-btn header-btn" id="menu-btn" aria-label="Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <div class="header-branding">
+        <span class="company-name">GURUKRUPATECH</span>
+        <div class="logo-wrapper">
+          <img src="guru-ai-logo.png" alt="GURU AI Logo" class="guru-logo">
         </div>
-        <button class="icon-btn" type="button">⚙</button>
+        <span class="badge">TRADER SHIV</span>
+      </div>
+
+      <button class="icon-btn header-btn" id="header-settings-btn" aria-label="Settings">
+        <i class="fa-solid fa-gear"></i>
+      </button>
     </header>
 
-    <div class="top-actions">
-        <button class="action-pill" id="topMicBtn" type="button">
-            🎤 MIC
-        </button>
-        <button class="action-pill" id="voiceTestBtn" type="button">
-            🔊 VOICE
-        </button>
+    <div class="top-controls">
+      <button class="top-btn" id="top-mic-btn">
+        <i class="fa-solid fa-microphone"></i>
+        <span>MIC</span>
+      </button>
+
+      <button class="top-btn" id="top-voice-btn">
+        <i class="fa-solid fa-volume-high"></i>
+        <span>VOICE</span>
+      </button>
     </div>
 
-    <div class="avatar-section">
-        <div class="avatar-outer-ring" id="avatarRing">
-            <div class="avatar-inner">
-                <img src="swity-avatar.png">
+    <section class="avatar-section">
+      <div class="avatar-container" id="avatar-container">
+        <img src="neon-orbit-ring.png" alt="Neon Orbit Ring" class="neon-ring-img outer">
+        <div class="ring middle-ring"></div>
+        <div class="ring inner-ring"></div>
+        
+        <div class="avatar-wrapper">
+          <img src="swity-avatar.png" alt="Swity AI Avatar" id="avatar-img" class="avatar-img">
+          <div class="avatar-glow-overlay"></div>
+        </div>
+      </div>
+
+      <div class="assistant-info">
+        <h2 class="assistant-name">Swity AI Assistant</h2>
+        <p class="assistant-subtitle">Your Personal AI Companion</p>
+      </div>
+    </section>
+
+    <section class="hud-panel-frame">
+      <img src="hud-panel.png" alt="HUD Panel" class="hud-panel-overlay">
+      <img src="holographic-globe.png" alt="Holographic Globe" class="globe-bg">
+
+      <div class="chat-container" id="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="message bot-message">
+            <div class="message-avatar">
+              <img src="swity-avatar.png" alt="Swity">
             </div>
-        </div>
-        <div class="assistant-title">
-            <h2>Swity AI Assistant</h2>
-            <p>Your Personal AI Companion</p>
-        </div>
-    </div>
-
-    <div class="display-screen">
-        <div class="globe-bg"></div>
-        <div class="chat-area" id="chatArea">
-            <div class="bot-msg-container">
-              <img src="assets/swity-avatar.png" alt="Swity">
-                </div>
-                <div class="msg-content">
-                    <div class="msg-text">Hello! I'm Swity, your assistant. How can I help you today?</div>
-                    <div class="msg-time" id="greetingTime">04:35 PM</div>
-                </div>
+            <div class="message-content">
+              <p>Hello! Main Swity hoon. Aaj main aapki kya sahayata kar sakti hoon?</p>
+              <span class="timestamp" id="initial-time">04:35 PM</span>
             </div>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <div class="input-container">
+      <div class="input-wrapper">
+        <input type="text" id="user-input" placeholder="Ask anything..." autocomplete="off">
+        <button id="send-btn" class="send-btn" aria-label="Send">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
     </div>
 
-    <div class="input-row">
-        <div class="input-box">
-            <input type="text" id="userInput" placeholder="Ask anything..." autocomplete="off">
+    <nav class="bottom-nav">
+      <button class="nav-btn" id="bottom-mic-btn">
+        <i class="fa-solid fa-microphone"></i>
+        <span>MIC</span>
+      </button>
+
+      <button class="nav-btn" id="bottom-settings-btn">
+        <i class="fa-solid fa-sliders"></i>
+        <span>SETTINGS</span>
+      </button>
+
+      <button class="nav-btn" id="bottom-voice-btn">
+        <i class="fa-solid fa-volume-high"></i>
+        <span>VOICE</span>
+      </button>
+    </nav>
+
+  </div>
+
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-content glass-card">
+      <div class="modal-header">
+        <h3>System Settings</h3>
+        <button class="close-btn" id="close-settings"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <label for="language-select"><i class="fa-solid fa-globe"></i> Assistant Language</label>
+          <select id="language-select" class="custom-select">
+            <option value="en-US">English</option>
+            <option value="hi-IN">Hindi (हिंदी)</option>
+            <option value="mr-IN">Marathi (मराठी)</option>
+          </select>
         </div>
-        <button class="send-btn" id="sendBtn" type="button">➤</button>
+
+        <div class="setting-group">
+          <label for="speech-rate"><i class="fa-solid fa-gauge-high"></i> Voice Speed</label>
+          <input type="range" id="speech-rate" min="0.5" max="1.5" step="0.1" value="1.0">
+        </div>
+
+        <div class="setting-group toggle-group">
+          <span><i class="fa-solid fa-comment-dots"></i> Auto Voice Output</span>
+          <label class="switch">
+            <input type="checkbox" id="auto-voice-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <div class="bottom-actions">
-        <button class="bottom-pill" id="bottomMicBtn" type="button">
-            🎤 MIC
-        </button>
-        <button class="bottom-pill" id="settingsBtn" type="button">
-            ⚙ SETTINGS
-        </button>
-        <button class="bottom-pill" id="bottomVoiceBtn" type="button">
-            🔊 VOICE
-        </button>
-    </div>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const userInput = document.getElementById('userInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const chatArea = document.getElementById('chatArea');
-        const avatarRing = document.getElementById('avatarRing');
-        const topMicBtn = document.getElementById('topMicBtn');
-        const bottomMicBtn = document.getElementById('bottomMicBtn');
-        const voiceTestBtn = document.getElementById('voiceTestBtn');
-        const bottomVoiceBtn = document.getElementById('bottomVoiceBtn');
-        const greetingTime = document.getElementById('greetingTime');
-
-        // Set Real Time
-        const now = new Date();
-        greetingTime.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-        // Web Speech APIs
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = null;
-        let isListening = false;
-
-        if (SpeechRecognition) {
-            try {
-                recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.lang = 'en-US';
-
-                recognition.onstart = () => {
-                    isListening = true;
-                    avatarRing.classList.add('listening');
-                };
-
-                recognition.onresult = (event) => {
-                    const transcript = event.results[0][0].transcript;
-                    userInput.value = transcript;
-                    handleSend();
-                };
-
-                recognition.onerror = () => stopListening();
-                recognition.onend = () => stopListening();
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        function startListening() {
-            if (!recognition) {
-                alert("Speech recognition is not supported on this browser.");
-                return;
-            }
-            if (isListening) return;
-            stopSpeech();
-            try {
-                recognition.start();
-            } catch(e) {
-                stopListening();
-            }
-        }
-
-        function stopListening() {
-            isListening = false;
-            avatarRing.classList.remove('listening');
-            if (recognition) {
-                try { recognition.stop(); } catch(e){}
-            }
-        }
-
-        function stopSpeech() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-            avatarRing.classList.remove('speaking');
-        }
-
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            stopSpeech();
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.0;
-
-            utterance.onstart = () => {
-                avatarRing.classList.add('speaking');
-            };
-
-            utterance.onend = () => {
-                avatarRing.classList.remove('speaking');
-            };
-
-            utterance.onerror = () => {
-                avatarRing.classList.remove('speaking');
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function appendUserMessage(text) {
-            const div = document.createElement('div');
-            div.className = 'user-msg';
-            div.textContent = text;
-            chatArea.appendChild(div);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function appendBotMessage(text) {
-            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            const container = document.createElement('div');
-            container.className = 'bot-msg-container';
-            container.innerHTML = `
-                <div class="bot-icon">
-                    <img src="https://i.ibb.co/L5342Wj/swity-avatar.png" alt="Swity" onerror="this.src='https://cdn-icons-png.flaticon.com/512/4712/4712109.png'">
-                </div>
-                <div class="msg-content">
-                    <div class="msg-text">${text}</div>
-                    <div class="msg-time">${timeStr}</div>
-                </div>
-            `;
-            chatArea.appendChild(container);
-            chatArea.scrollTop = chatArea.scrollHeight;
-        }
-
-        function handleSend() {
-            const text = userInput.value.trim();
-            if (!text) return;
-
-            appendUserMessage(text);
-            userInput.value = '';
-
-            setTimeout(() => {
-                let reply = "I am Swity AI. I got your message: " + text;
-                const lower = text.toLowerCase();
-                if (lower.includes("hello") || lower.includes("hi")) {
-                    reply = "Hello! Swity here to help you.";
-                } else if (lower.includes("gurukrupatech") || lower.includes("guru")) {
-                    reply = "GurukrupaTech AI system is ready for automation.";
-                }
-                appendBotMessage(reply);
-                speakText(reply);
-            }, 500);
-        }
-
-        // Event Listeners
-        sendBtn.addEventListener('click', handleSend);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSend();
-        });
-
-        topMicBtn.addEventListener('click', () => isListening ? stopListening() : startListening());
-        bottomMicBtn.addEventListener('click', () => isListening ? stopListening() : startListening());
-
-        const testVoiceAction = () => {
-            const msg = "Voice system test successful. Swity AI is online.";
-            appendBotMessage(msg);
-            speakText(msg);
-        };
-
-        voiceTestBtn.addEventListener('click', testVoiceAction);
-        bottomVoiceBtn.addEventListener('click', testVoiceAction);
-    });
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
