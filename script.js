@@ -185,18 +185,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function generateBotResponse(input) {
-    const query = input.toLowerCase();
+  const query = input.toLowerCase();
 
-    if (query.includes('hello') || query.includes('hi') || query.includes('namaste')) {
-      return "Hello! Main Swity hoon. Aaj main aapki kya sahayata kar sakti hoon?";
-    } else if (query.includes('who are you') || query.includes('kaun ho')) {
-      return "Main Swity hoon, GURUKRUPATECH aur TRADER SHIV ki AI Assistant.";
-    } else if (query.includes('time') || query.includes('samay')) {
-      return `Abhi ka samay ${getCurrentTime()} hai.`;
-    } else {
-      return `Maine aapka query observe kiya: "${input}". Main aapki sahayata ke liye taiyar hoon.`;
-    }
+  if (query.includes('hello') || query.includes('hi') || query.includes('namaste')) {
+    return `Hello Boss! 👋
+
+I'm Swity AI by GURUKRUPATECH.
+
+Your intelligent AI companion for Trading, Coding, Technology, Learning, Creativity, and Smart Solutions.
+
+How may I assist you today?`;
+  } else if (query.includes('who are you') || query.includes('kaun ho')) {
+    return "Main Swity hoon, GURUKRUPATECH aur TRADER SHIV ki AI Assistant.";
+  } else if (query.includes('time') || query.includes('samay')) {
+    return `Abhi ka samay ${getCurrentTime()} hai.`;
+  } else {
+    return `Maine aapka query observe kiya: "${input}". Main aapki sahayata ke liye taiyar hoon.`;
   }
+}
 
   function speakText(text) {
     if (!synth) return;
