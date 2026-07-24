@@ -741,10 +741,42 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 
     .nav-btn i{
         font-size:16px;
-        margin-bottom:35px;
+        margin-bottom:0px;
     }
 
     .nav-btn span{
         font-size:11px;
     }
+}
+/* ==========================================
+   BOTTOM 3 BUTTONS SIZE FIX
+   ========================================== */
+
+.bottom-nav{
+    display:flex;
+    justify-content:center;
+    gap:8px;
+    padding:4px 10px;
+    margin-bottom:5px;
+}
+
+.bottom-nav .nav-btn{
+    flex:none !important;
+    width:70px !important;
+    height:38px !important;
+    padding:2px !important;
+    border-radius:12px !important;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.bottom-nav .nav-btn i{
+    font-size:15px !important;
+}
+
+.bottom-nav .nav-btn span{
+    font-size:9px !important;
 }
