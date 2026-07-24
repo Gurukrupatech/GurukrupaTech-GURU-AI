@@ -699,8 +699,6 @@ input:checked + .slider:before { transform: translateX(20px); background-color: 
 }
 
 /* Mobile Screens Ke Liye Adjustment */
-@
-/* Mobile Screens */
 @media screen and (max-width: 480px) {
 
     .chat-container{
