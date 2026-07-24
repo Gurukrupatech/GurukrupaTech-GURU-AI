@@ -200,7 +200,7 @@ How may I assist you today?`;
   } else if (query.includes('time') || query.includes('samay')) {
     return `Abhi ka samay ${getCurrentTime()} hai.`;
   } else {
-    return `Maine aapka query observe kiya: "${input}". Main aapki sahayata ke liye taiyar hoon.`;
+    return "Hello Boss! I'm Swity AI by GURUKRUPATECH. Your intelligent AI companion for Trading, Coding, Technology, Learning, Creativity, and Smart Solutions. How may I assist you today?";
   }
 }
 
