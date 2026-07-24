@@ -662,4 +662,50 @@ body, html {
 
 input:checked + .slider { background-color: var(--cyan-glow); }
 input:checked + .slider:before { transform: translateX(20px); background-color: #000; }
+/* ==========================================
+   BOTTOM INPUT AREA & BUTTONS FIX
+   ========================================== */
+
+/* Input container ko niche flex arrange karne ke liye */
+.input-section {
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+}
+
+/* Input field styling */
+.input-section input {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 20px;
+    border: 1px solid #00f0ff;
+    background: transparent;
+    color: #ffffff;
+    outline: none;
+}
+
+/* Niche wale Action Buttons (Mic, Settings, Voice) */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+/* Mobile Screens Ke Liye Adjustment */
+@media screen and (max-width: 480px) {
+    .chat-container {
+        max-height: 52vh;
+    }
+    
+    .input-section {
+        padding: 8px 10px;
+    }
+}
 
