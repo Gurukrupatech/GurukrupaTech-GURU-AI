@@ -530,40 +530,34 @@ body, html {
 }
 
 /* BOTTOM NAVIGATION */
-.bottom-nav {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  z-index: 3;
-  
-position: relative;
-    bottom: 30px;
+.bottom-nav{
+    display:flex;
+    justify-content:space-evenly;
+    align-items:center;
+    gap:10px;
 }
 
 .nav-btn{
-    flex: 1;
-    max-width: 70px;
-    height: 40px;
+    flex:none;          /* flex:1 काढ */
+    width:80px;
+    height:42px;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 
-    gap: 2px;
+    padding:2px;
+    border-radius:12px;
+    font-size:10px;
+}
 
-    background: rgba(6,25,45,.75);
-    border: 1px solid var(--glass-border);
-    border-radius: 14px;
+.nav-btn i{
+    font-size:18px;
+}
 
-    color: var(--text-main);
-    font-size: 10px;
-    font-weight: 600;
-
-    padding: 4px;
-    cursor: pointer;
-
-    transition: .3s;
+.nav-btn span{
+    font-size:10px;
 }
 
 .nav-btn i{
